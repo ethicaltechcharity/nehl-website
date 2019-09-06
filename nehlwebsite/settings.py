@@ -25,7 +25,7 @@ SECRET_KEY = 'kja)=3vy7s&+snkdu!x1m20k!4ai$ajn*!xf5&zu8zf4t+hjct'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['nehl-website-env.4atmymrcpa.eu-west-2.elasticbeanstalk.com']
 
 
 # Application definition

@@ -3,7 +3,6 @@ venv/
 .idea/
 *.pyc
 *.pyo
-*.css
 *.map
 
 bin/

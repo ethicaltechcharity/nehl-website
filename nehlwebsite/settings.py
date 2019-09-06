@@ -25,7 +25,7 @@ SECRET_KEY = 'kja)=3vy7s&+snkdu!x1m20k!4ai$ajn*!xf5&zu8zf4t+hjct'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['nehl-website-env.4atmymrcpa.eu-west-2.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['nehl-web-env.4atmymrcpa.eu-west-2.elasticbeanstalk.com']
 
 
 # Application definition
@@ -129,7 +129,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, "..", "..", "www", "static")
+STATIC_ROOT = os.path.join(BASE_DIR, "..", "www", "static")
 STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = '/accounts/profile'

@@ -1,0 +1,114 @@
+@import "../../../nehlwebsite/static/nehlwebsite/style";
+
+.cover-image {
+    background-image: url(/static/home/banner-greyb.png);
+    background-repeat: no-repeat;
+    background-position: left top;
+    background-size: cover;
+    height: 400px;
+}
+
+.banner-title {
+    color: #79B473;
+    font-size: 175%;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    max-width: 400px;
+    padding-top: 20px;
+}
+
+.banner-image {
+    background-image: url(/static/home/angled-pitch.png);
+    background-repeat: no-repeat;
+    background-position: left 20%;
+    background-size: cover;
+    background-color: #E9ECEF;
+    height: 250px;
+    width:100%;
+}
+
+.banner {
+    background-color: #E9ECEF;
+    padding-right: 0;
+    margin-right: 0;
+}
+
+.banner .col {
+    padding-right: 0;
+    margin-right: 0;
+}
+
+.banner-container {
+    margin-right: 0;
+    padding-right: 0;
+}
+
+.banner-title-container button {
+    background-color: #62268a;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    max-width: 250px;
+    border-color: #4c1965;
+}
+
+.banner-title-container button:hover {
+    background-color: #4c1965;
+}
+
+.content-header {
+    margin-top: 50px;
+}
+
+// No media query necessary for xs breakpoint as it's effectively `@media (min-width: 0) { ... }`
+@include media-breakpoint-up(sm) {
+    .banner-title {
+        font-size: 250%;
+    }
+}
+
+@include media-breakpoint-up(md) {
+
+    .banner-title-container {
+        padding-left: 20px;
+        padding-top: 20px;
+    }
+
+    .banner-image {
+        height:400px;
+    }
+}
+
+@include media-breakpoint-up(lg) {
+
+    .banner-title-container{
+        padding-left: 15px;
+        padding-top: 15px;
+    }
+
+    .banner-title {
+        font-size: 385%;
+    }
+
+    .banner-image {
+        height:450px;
+    }
+}
+
+@include media-breakpoint-up(xl) {
+
+    .banner-title-container{
+        padding-left: 20%;
+        padding-top: 40px;
+    }
+    .banner-image {
+        height:500px;
+    }
+}
+
+@media (min-width: 1600px) {
+
+    .banner-title-container{
+        padding-left: 40%;
+        padding-top: 40px;
+    }
+}

@@ -1,0 +1,69 @@
+{% extends 'nehlwebsite/base.html' %}
+
+{% load static %}
+
+{% block css %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'clubs/style.css' %}">
+
+    <style>
+        .club-colour-background {
+            background-color: {{ club.primary_colour }};
+        }
+        .club-secondary-colour-text {
+            color: {{ club.secondary_colour }};
+        }
+    </style>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container px-0">
+
+        <div class="card text-white py-2 pl-3 mt-3 rounded-0 border-0 club-colour-background">
+            <div class="row">
+                <div class="col">
+                    <h2 class="card-title m-0 ml-md-2 my-3 club-secondary-colour-text">{{ club.name }}</h2>
+                </div>
+                <div class="col d-flex justify-content-end align-items-center ">
+                    <a href="#" role="button" class="btn btn-outline-light mr-4">Manage Club</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row m-0 p-0 pt-3">
+            <div class="col-12 col-sm-4 m-0 p-0">
+                <div class="card rounded-0 p-0 m-0 border-0">
+                    <div class="card-header border rounded-0">
+                        Teams
+                    </div>
+                    <div class="list-group rounded-0">
+                        {% for team in club.team_set.all %}
+                            <a href="{% url 'teams:detail' team.id %}" class="rounded-0 list-group-item list-group-item-action">
+                                {{ team.name }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-8 pr-0 mx-0 pt-3 pl-0 pt-sm-0 pl-sm-3">
+                <div class="card rounded-0 p-0 m-0 border-0">
+                    <div class="card-header border rounded-0">
+                        Main Venue
+                    </div>
+                    <div class="card-body border border-top-0">
+                        <h4>Newcastle Trampoline Park and Gym</h4>
+                        <address class="my-2">West Road, Newcastle upon Tyne</address>
+                        <button type="button" class="btn btn-success mt-0">Show on a map</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+{% endblock %}

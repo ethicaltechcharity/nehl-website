@@ -1,5 +1,47 @@
 {% extends 'nehlwebsite/base.html' %}
 
+{% load static %}
+
+{% block css %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}">
+
+{% endblock %}
+
 {% block content %}
-<p>test</p>
+
+    <div class="container-fluid banner-container">
+        <div class="row banner">
+            <div class="col">
+                <div class="banner-title-container">
+                    <h1 class="banner-title">NORTH EAST HOCKEY LEAGUE</h1>
+                    <a role="button" class="btn btn-lg btn-primary btn-block text-white mt-4" href="{% url 'clubs:index' %}">Find a club</a>
+                </div>
+
+            </div>
+            <div class="col">
+                <div class="banner-image"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="content-header">
+            <h2 class="display-4">About Us</h2>
+            <p class="lead">
+                The North East Hockey League is a (field) hockey league based in the north east of England.
+            </p>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p>
+                    The league consists of four divisions with 20 clubs and 44 teams participating. Nam pretium, justo vitae pellentesque imperdiet, libero nunc ornare augue, non volutpat erat ligula maximus dui. Etiam sit amet massa in eros consectetur sagittis non quis metus. Vivamus tincidunt ante tellus, in porttitor mi blandit eget. Ut in ipsum ut odio semper commodo. Vestibulum sed nulla a erat semper efficitur. Quisque eget egestas nibh, vel rutrum massa. </p>
+                <p>
+                    Aenean facilisis elit vel ultricies pharetra. Duis consectetur scelerisque laoreet. Proin cursus aliquam tincidunt. Nunc vel risus metus. Phasellus eleifend felis a sem vehicula, interdum tempus magna mattis. Maecenas mollis, nibh sit amet fermentum scelerisque, orci ipsum facilisis erat, nec lobortis nisl ante in felis. Pellentesque eget mauris lobortis, ultricies urna nec, lacinia nisl.
+                </p>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}

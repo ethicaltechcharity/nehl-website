@@ -1,0 +1,84 @@
+{% extends 'nehlwebsite/base.html' %}
+
+{% load static %}
+
+{% block css %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'clubs/style.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+
+{#        <div class="card search-box">#}
+{#            <div class="card-body">#}
+{#                <h5 class="card-title">Search Clubs</h5>#}
+{#                <form class="form-inline">#}
+{#                    <div class="row">#}
+{#                        <label class="col-form-label mr-1 ml-3">Search by</label>#}
+{#                        <div class="col">#}
+{#                            <nav>#}
+{#                                <div class="nav nav-pills" id="nav-tab" role="tablist">#}
+{#                                    <a class="nav-item nav-link active" id="nav-profile-tab" data-toggle="tab"#}
+{#                                       href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Name</a>#}
+{#                                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab"#}
+{#                                       href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Postcode</a>#}
+{#                                </div>#}
+{#                            </nav>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="row">#}
+{#                        <div class="col">#}
+{#                            <div class="tab-content" id="nav-tabContent">#}
+{#                                <div class="tab-pane fade show active" id="nav-profile" role="tabpanel"#}
+{#                                     aria-labelledby="nav-profile-tab">#}
+{#                                    <div class="form-group my-1">#}
+{#                                        <input type="text" class="form-control col ml-2" id="name">#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="tab-pane fade" id="nav-contact" role="tabpanel"#}
+{#                                     aria-labelledby="nav-contact-tab">#}
+{#                                    <div class="form-group my-1">#}
+{#                                        <input type="text" class="form-control col ml-2" id="postcode">#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{##}
+{#                </form>#}
+{#            </div>#}
+{#        </div>#}
+
+        <div class="jumbotron">
+              <h1 class="display-4">Clubs</h1>
+        </div>
+
+        <div class="row">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Main Venue</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for club in clubs %}
+                <tr>
+                    <td>{{ club.name }}</td>
+                    <td>{{ club.main_venue.name }}</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" href="{% url 'clubs:detail' club.id %}" role="button">More Info</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,132 @@
+{% extends 'nehlwebsite/base.html' %}
+
+{% load static %}
+
+{% block css %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'fixtures/style.css' %}">
+
+    <style>
+        .team-a-background {
+            background-color: {{ fixture.team_a.club.primary_colour }};
+        }
+
+        .team-b-background {
+            background-color: {{ fixture.team_b.club.primary_colour }};
+        }
+    </style>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container px-0">
+        <div class="row m-0 p-0">
+            <div class="col-5 fixture-banner d-flex align-items-center justify-content-end">
+                <div class="d-none d-md-block">
+                    <h2 class="text-right">{{ fixture.team_a.club.name }}</h2>
+                    <h3 class="text-right">{{ fixture.team_a.name }}</h3>
+                </div>
+                <div class="d-block d-md-none">
+                    <h2 class="text-right">{{ fixture.team_a.club.short_name|default_if_none:fixture.team_a.club.name }}</h2>
+                    <h3 class="text-right">{{ fixture.team_a.short_name }}</h3>
+                </div>
+            </div>
+            <div class="col-2 d-flex align-items-center justify-content-center">
+                <div class="d-flex versus bg-dark justify-content-center">
+                    <h5 class="text-center text-white align-self-center m-0">0 - 0</h5>
+                </div>
+            </div>
+            <div class="col-5 d-flex align-items-center">
+                <div class="d-none d-md-block">
+                    <h2>{{ fixture.team_b.club.name }}</h2>
+                    <h3>{{ fixture.team_b.name }}</h3>
+                </div>
+                <div class="d-block d-md-none">
+                    <h2>{{ fixture.team_b.club.short_name|default_if_none:fixture.team_b.club.name }}</h2>
+                    <h3>{{ fixture.team_b.short_name }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <p class="small m-0 text-center">Venue: {{ fixture.venue.name }}</p>
+        </div>
+        <div class="d-flex justify-content-center">
+            <p class="small m-0 text-center">
+                Competition: {{ fixture.competition.parent_competition|default_if_none:"" }} {{ fixture.competition.short_name }}</p>
+        </div>
+        <div class="d-flex justify-content-center mb-4">
+            <p class="small m-0 text-center">Date: {{ fixture.date }}</p>
+        </div>
+
+        <hr class="mb-4"/>
+
+        <div class="row">
+            <div class="col-12 col-md-8 mb-3">
+                <div class="card">
+                    <div class="card-header">
+                        Venue
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="row m-0">
+                            <div class="col-12 col-sm-4 p-3">
+                                <h5>{{ fixture.venue.name }}</h5>
+                                <address>{{ fixture.venue.street_name }}<br/>
+                                    {{ fixture.venue.postcode }}
+                                </address>
+                                <a class="btn btn-success" href="#" role="button">Directions</a>
+                            </div>
+                            <div class="col-8">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-12">
+                        <div class="dropdown mb-3">
+                            <button class="btn btn-block btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Manage Fixture
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Request Cancellation/Postponement</a>
+                                <a class="dropdown-item" href="#">Submit Match Card</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                Umpire A
+                            </div>
+                            <img src="..." class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">Dan Baxter</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the
+                                    bulk of
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                Umpire B
+                            </div>
+                            <img src="..." class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">Jamie Noble</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the
+                                    bulk of
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

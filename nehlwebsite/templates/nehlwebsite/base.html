@@ -18,7 +18,7 @@
     <div class="navbar navbar-dark fixed-top navbar-expand-lg navbar-toggleable-sm">
         <div class="container">
             <div class="navbar-brand">
-                <h1>NEHL</h1>
+                <a href="{% url 'index' %}" class="no-underline"><h1 class="text-white">NEHL</h1></a>
             </div>
             <button
                     class="navbar-toggler navbar-toggler-right"
@@ -32,14 +32,14 @@
             </button>
             <div class="navbar-collapse collapse" id="navbarNavAltMarkup">
                 <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'clubs:index' %}">Clubs</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Rules</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{% url 'index' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{% url 'clubs:index' %}">Clubs</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{% url 'rules' %}">Rules</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="#">Contact</a></li>
                     {% if user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link" href="/accounts/profile">My Profile</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/accounts/profile">My Profile</a></li>
                     {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}">Log In</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="{% url 'accounts:login' %}">Log In</a></li>
                     {%  endif %}
                 </ul>
             </div>

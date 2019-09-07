@@ -25,7 +25,8 @@ SECRET_KEY = 'kja)=3vy7s&+snkdu!x1m20k!4ai$ajn*!xf5&zu8zf4t+hjct'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['nehl-web-env.pyrmmangss.eu-west-2.elasticbeanstalk.com', "127.0.0.1"]
+ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['nehl-web-env.pyrmmangss.eu-west-2.elasticbeanstalk.com', "127.0.0.1"]
 
 # Application definition
 
@@ -134,19 +135,23 @@ STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = '/accounts/profile'
 
-# S3 Config
-AWS_STORAGE_BUCKET_NAME = 'nehl-web-files'
-AWS_S3_REGION_NAME = 'eu-west-2'  # e.g. us-east-2
-AWS_ACCESS_KEY_ID = 'AKIAVJX73VHGUEA23CEL'
-AWS_SECRET_ACCESS_KEY = 'HUrhC8LN4FJgeXcU90bu5MwwjwHcRYx2JGPTJFZy'
-
-# Tell django-storages the domain to use to refer to static files.
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-
-# Tell the staticfiles app to use S3Boto3 storage when writing the collected static files (when
 # you run `collectstatic`).
-STATICFILES_LOCATION = 'static'
-STATICFILES_STORAGE = 'nehlwebsite.custom_storages.StaticStorage'
 
-MEDIAFILES_LOCATION = 'media'
-DEFAULT_FILE_STORAGE = 'nehlwebsite.custom_storages.MediaStorage'
+if not DEBUG:
+    SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
+
+    # S3 Config
+    AWS_STORAGE_BUCKET_NAME = 'nehl-web-files'
+    AWS_S3_REGION_NAME = 'eu-west-2'  # e.g. us-east-2
+    AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+    AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+
+    # Tell django-storages the domain to use to refer to static files.
+    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+    STATICFILES_LOCATION = 'static'
+    STATICFILES_STORAGE = 'nehlwebsite.custom_storages.StaticStorage'
+
+    MEDIAFILES_LOCATION = 'media'
+    DEFAULT_FILE_STORAGE = 'nehlwebsite.custom_storages.MediaStorage'
+

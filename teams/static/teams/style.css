@@ -58,6 +58,10 @@ textarea {
   display: none;
 }
 
+.no-underline {
+  text-decoration: none !important;
+}
+
 body {
   padding-top: 82px;
 }
@@ -9722,10 +9726,6 @@ h3 {
   text-align: center;
   width: 50px;
   height: 1.5em;
-}
-
-.no-underline {
-  text-decoration: none !important;
 }
 
 /*# sourceMappingURL=style.css.map */

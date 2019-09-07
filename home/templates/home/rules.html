@@ -1,0 +1,22 @@
+{% extends 'nehlwebsite/base.html' %}
+
+{% load static %}
+
+{% block css %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="jumbotron">
+            <h2 class="display-4">Rules</h2>
+            <p class="lead">
+                These rules govern North East Hockey League competitions.
+            </p>
+        </div>
+    </div>
+
+{% endblock %}

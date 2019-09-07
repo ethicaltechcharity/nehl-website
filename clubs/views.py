@@ -3,7 +3,7 @@ from clubs.models import Club
 
 
 def index(request):
-    clubs = Club.objects.all()
+    clubs = Club.objects.order_by("name").all()
     return render(request, 'clubs/index.html', {'clubs': clubs})
 
 

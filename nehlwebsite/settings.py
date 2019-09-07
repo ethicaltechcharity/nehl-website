@@ -25,7 +25,7 @@ SECRET_KEY = 'kja)=3vy7s&+snkdu!x1m20k!4ai$ajn*!xf5&zu8zf4t+hjct'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['nehl-web.pyrmmangss.eu-west-2.elasticbeanstalk.com', "127.0.0.1"]
+ALLOWED_HOSTS = ['nehl-web-env.pyrmmangss.eu-west-2.elasticbeanstalk.com', "127.0.0.1"]
 
 # Application definition
 

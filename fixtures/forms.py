@@ -1,16 +1,22 @@
 from django import forms
 
 
+CANCELLATION_REASON_CHOICES = [
+    ('PITCH_UNFIT', 'Pitch Unfit'),
+    ('INSUFFICIENT_PLAYERS', 'Insufficient Players'),
+    ('ADMINISTRATION_ERROR', 'Administration Error'),
+    ('OTHER', 'Other')
+]
+
+
 class FixtureCancellationForm(forms.Form):
-    team_one = forms.ChoiceField(label="Home Team")
-    team_two = forms.ChoiceField(label="Away Team")
-    division = forms.ChoiceField()
-    fixture_date = forms.DateField(
-        input_formats=['%d/%m/%Y'],
-        widget=forms.DateInput(attrs={
-            'class': 'datepicker'
-        }))
-    team_that_cancelled = forms.ChoiceField()
-    cancellation_reason = forms.ChoiceField()
-    more_cancellation_info = forms.Textarea()
+    cancellation_reason = forms.ChoiceField(
+        choices=CANCELLATION_REASON_CHOICES
+    )
+    more_cancellation_info = forms.CharField(
+        label="More Information",
+        required=False,
+        widget=forms.Textarea,
+        max_length=150
+    )
 

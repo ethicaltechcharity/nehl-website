@@ -19,10 +19,47 @@ class Competition(models.Model):
                                            related_name='child_competition',
                                            blank=True
                                            )
-    officials = models.ManyToManyField('CompetitionOfficial')
+    officials = models.ManyToManyField('CompetitionOfficial', blank=True)
+    rules = models.ManyToManyField('RuleSet', blank=True)
 
     def __str__(self):
         return self.name
+
+
+class Penalty(models.Model):
+    description = models.CharField(max_length=400)
+
+    def __str__(self):
+        return self.description
+
+    class Meta:
+        verbose_name_plural = "penalties"
+
+
+class Rule(models.Model):
+    number = models.IntegerField()
+    penalty = models.ManyToManyField('Penalty', blank=True)
+
+    def __str__(self):
+        return self.ruleset_set.first().__str__() + " - " + self.number.__str__()
+
+
+class RuleSet(models.Model):
+    number = models.IntegerField()
+    name = models.CharField(max_length=50)
+    rules = models.ManyToManyField('Rule', blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class RuleParagraph(models.Model):
+    number = models.IntegerField()
+    content = models.CharField(max_length=500)
+    rule = models.ForeignKey('Rule', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.content
 
 
 class Venue(models.Model):
@@ -70,9 +107,14 @@ class Fixture(models.Model):
 
 
 class FixtureCancellation(models.Model):
+    cancellation_reporter = models.ForeignKey('clubs.Member', on_delete=models.SET_NULL, null=True)
     fixture = models.ForeignKey(Fixture, on_delete=models.CASCADE)
     datetime_cancelled = models.DateTimeField()
     cancellation_reason = models.CharField(max_length=30)
+    more_info = models.CharField(max_length=150)
+
+    def __str__(self):
+        return self.fixture.__str__()
 
 
 class Official(models.Model):
@@ -93,4 +135,7 @@ class Umpire(MatchOfficial):
 
 
 class CompetitionOfficial(Official):
-    pass
+    type = models.IntegerField()
+
+    def __str__(self):
+        return self.user.username

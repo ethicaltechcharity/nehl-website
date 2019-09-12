@@ -17,6 +17,36 @@
                 These rules govern North East Hockey League competitions.
             </p>
         </div>
+
+        <div class="accordion" id="accordionExample">
+            {% for ruleset in competition.rules.all %}
+                <div class="card">
+                    <div class="card-header" id="headingOne">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#ruleset-{{ ruleset.number }}"
+                                    aria-expanded="false" aria-controls="collapseOne">
+                                {{ ruleset.number }}. {{ ruleset.name }}
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="ruleset-{{ ruleset.number }}" class="collapse" aria-labelledby="headingOne"
+                         data-parent="#accordionExample">
+                        <div class="card-body">
+                            {% for rule in ruleset.rules.all %}
+                                <div class="row">
+                                    <div class="col-1 text-right"><p>{{ rule.number }}</p></div>
+                                    <div class="col">
+                                        {% for paragraph in rule.ruleparagraph_set.all %}
+                                            <p class="mb-2">{{ paragraph.content }}</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 
 {% endblock %}

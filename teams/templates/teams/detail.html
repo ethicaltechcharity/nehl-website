@@ -1,5 +1,9 @@
 {% extends 'nehlwebsite/base.html' %}
 
+{% block title %}
+    {{ team.club.short_name|default_if_none:team.club.name }} {{ team.short_name }}
+{% endblock %}
+
 {% load static %}
 
 {% block css %}
@@ -10,6 +14,7 @@
         .club-colour-background {
             background-color: {{ team.club.primary_colour }};
         }
+
         .club-secondary-colour-text {
             color: {{ team.club.secondary_colour }};
         }
@@ -25,11 +30,32 @@
         <div class="card text-white py-2 pl-3 mt-3 rounded-0 border-0 club-colour-background px-3">
             <div class="row">
                 <div class="col">
-                    <a href="{% url 'clubs:detail' team.club.id %}" class="no-underline" ><h2 class="card-title m-0 ml-md-2 my-3 club-secondary-colour-text ">{{ team.club.name }}</h2></a>
+                    <a href="{% url 'clubs:detail' team.club.id %}" class="no-underline"><h2
+                            class="card-title m-0 ml-md-2 my-3 club-secondary-colour-text ">{{ team.club.name }}</h2>
+                    </a>
                 </div>
-                <div class="col d-flex justify-content-end align-items-center">
-                    <a href="#" role="button" class="btn btn-outline-light mr-4">Manage Club</a>
-                </div>
+                {% if user.is_authenticated %}
+                    {% if can_manage %}
+                        <div class="col d-flex justify-content-end align-items-center">
+                            <a href="#" role="button" class="btn btn-outline-light mr-4">Manage Club</a>
+                        </div>
+                    {% else %}
+                        <div class="col d-flex justify-content-end align-items-center">
+                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                                  title="You do not have permission to manage this club.">
+                                <a href="#" role="button" class="btn btn-outline-light mr-4 disabled" disabled>Manage Club</a>
+                            </span>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="col d-flex justify-content-end align-items-center">
+                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                              title="You must log in to manage a club.">
+                            <a href="#" role="button" class="btn btn-outline-light mr-4 disabled"
+                               disabled>Manage Club</a>
+                        </span>
+                    </div>
+                {% endif %}
             </div>
         </div>
 
@@ -38,9 +64,28 @@
                 <div class="col">
                     <h3 class="card-title m-0 ml-md-2 my-3">{{ team.name }}</h3>
                 </div>
-                <div class="col d-flex justify-content-end align-items-center">
-                    <a href="#" role="button" class="btn btn-outline-dark mr-4">Manage Team</a>
-                </div>
+                {% if user.is_authenticated %}
+                    {% if can_manage %}
+                        <div class="col d-flex justify-content-end align-items-center">
+                            <a href="#" role="button" class="btn btn-outline-dark mr-4">Manage Team</a>
+                        </div>
+                    {% else %}
+                        <div class="col d-flex justify-content-end align-items-center">
+                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                                  title="You do not have permission to manage this team.">
+                                <a href="#" role="button" class="btn btn-outline-dark mr-4 disabled" disabled>Manage Team</a>
+                            </span>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="col d-flex justify-content-end align-items-center">
+                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                              title="You must log in to manage a team.">
+                            <a href="#" role="button" class="btn btn-outline-dark mr-4 disabled"
+                               disabled>Manage Team</a>
+                        </span>
+                    </div>
+                {% endif %}
             </div>
 
         </div>
@@ -49,44 +94,94 @@
             <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Upcoming Fixtures</a>
+                        <a class="nav-link active" id="upcoming-fixtures-tab" data-toggle="tab"
+                           href="#upcoming-fixtures" role="tab" aria-controls="upcoming-fixtures" aria-selected="true">Upcoming
+                            Fixtures</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" href="#">Past Fixtures</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="#">Club Officials</a>
+                        <a class="nav-link text-dark" id="past-fixtures-tab" data-toggle="tab" href="#past-fixtures"
+                           role="tab" aria-controls="past-fixtures" aria-selected="false">Past Fixtures</a>
                     </li>
                 </ul>
             </div>
             <div class="card-body px-0 px-sm-3 py-2">
-                <div class="list-group">
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="upcoming-fixtures" role="tabpanel"
+                         aria-labelledby="upcoming-fixtures-tab">
+                        <div class="list-group">
 
-                    <div class="list-group-item rounded-0 px-0 border-0">
-                        <div class="row mx-0 p-0 align-items-center ">
-                            <p class="col col-sm-3 m-0 p-0 pl-2 pl-md-3">Opposition</p>
-                            <p class="col col-sm-3 col-md-2 col-xl-2 m-0 px-2">Date</p>
-                            <p class="d-none d-sm-block col col-sm-3 col-md-2 m-0 px-2">Competition</p>
-                            <p class="d-none d-md-block col col-sm-3 col-md-2 m-0 px-2">Venue</p>
-                            <p class="col-3 col-sm-2 m-0 px-2"></p>
+                            <div class="list-group-item rounded-0 px-0 border-0">
+                                <div class="row mx-0 p-0 align-items-center ">
+                                    <p class="col col-sm-3 m-0 p-0 pl-2 pl-md-3">Opposition</p>
+                                    <p class="col col-sm-3 col-md-2 col-xl-2 m-0 px-2">Date</p>
+                                    <p class="d-none d-sm-block col col-sm-3 col-md-2 m-0 px-2">Competition</p>
+                                    <p class="d-none d-md-block col col-sm-3 col-md-2 m-0 px-2">Venue</p>
+                                    <p class="col-3 col-sm-2 m-0 px-2"></p>
+                                </div>
+                            </div>
+                            {% for fixture in upcoming_fixtures %}
+                                <div class="list-group-item rounded-0 px-0 border-left-0 border-right-0">
+                                    <div class="row mx-0 p-0 align-items-center">
+                                        <p class="d-block d-lg-none col col-sm-3 m-0 p-0 pl-2 pl-md-3">{{ fixture.team_b.club.short_name|default_if_none:fixture.team_b.club.name }}
+                                            - {{ fixture.team_b.short_name }}</p>
+                                        <p class="d-none d-lg-block col col-sm-3 m-0 p-0 pl-2 pl-md-3">{{ fixture.team_b.club.name }}
+                                            - {{ fixture.team_b.name }}</p>
+                                        <p class="col col-sm-3 col-md-2 col-xl-2 m-0 px-2">{{ fixture.date|date:"SHORT_DATE_FORMAT" }} {{ fixture.time|default_if_none:"TBA" }}</p>
+                                        <p class="d-none d-sm-block col col-3 col-md-2 m-0 px-2">{{ fixture.competition.parent_competition.short_name }} {{ fixture.competition.short_name }}</p>
+                                        <p class="d-none d-md-block col col-3 m-0 px-2">{{ fixture.venue.name }}</p>
+                                        <p class="col-3 col-sm-2 m-0 px-2"><a role="button"
+                                                                              class="btn btn-sm btn-success"
+                                                                              href="/fixtures/{{ fixture.id }}">View</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
-                    {% for fixture in fixtures %}
-                    <div class="list-group-item rounded-0 px-0 border-left-0 border-right-0">
-                        <div class="row mx-0 p-0 align-items-center">
-                            <p class="d-block d-lg-none col col-sm-3 m-0 p-0 pl-2 pl-md-3">{{ fixture.team_b.club.short_name|default_if_none:fixture.team_b.club.name }} - {{ fixture.team_b.short_name }}</p>
-                            <p class="d-none d-lg-block col col-sm-3 m-0 p-0 pl-2 pl-md-3">{{ fixture.team_b.club.name }} - {{ fixture.team_b.name }}</p>
-                            <p class="col col-sm-3 col-md-2 col-xl-2 m-0 px-2">{{ fixture.date|date:"SHORT_DATE_FORMAT" }} {{ fixture.time|default_if_none:"TBA" }}</p>
-                            <p class="d-none d-sm-block col col-3 col-md-2 m-0 px-2">{{ fixture.competition.parent_competition.short_name }} {{ fixture.competition.short_name }}</p>
-                            <p class="d-none d-md-block col col-3 m-0 px-2">{{ fixture.venue.name }}</p>
-                            <p class="col-3 col-sm-2 m-0 px-2"><a role="button" class="btn btn-sm btn-success" href="/fixtures/{{ fixture.id }}">View</a></p>
+                    <div class="tab-pane fade" id="past-fixtures" role="tabpanel" aria-labelledby="past-fixtures-tab">
+                        <div class="tab-pane fade show active" id="upcoming-fixtures" role="tabpanel"
+                             aria-labelledby="upcoming-fixtures-tab">
+                            <div class="list-group">
+
+                                <div class="list-group-item rounded-0 px-0 border-0">
+                                    <div class="row mx-0 p-0 align-items-center ">
+                                        <p class="col col-sm-3 m-0 p-0 pl-2 pl-md-3">Opposition</p>
+                                        <p class="col col-sm-3 col-md-2 col-xl-2 m-0 px-2">Date</p>
+                                        <p class="d-none d-sm-block col col-sm-3 col-md-2 m-0 px-2">Competition</p>
+                                        <p class="d-none d-md-block col col-sm-3 col-md-2 m-0 px-2">Venue</p>
+                                        <p class="col-3 col-sm-2 m-0 px-2"></p>
+                                    </div>
+                                </div>
+                                {% for fixture in past_fixtures %}
+                                    <div class="list-group-item rounded-0 px-0 border-left-0 border-right-0">
+                                        <div class="row mx-0 p-0 align-items-center">
+                                            <p class="d-block d-lg-none col col-sm-3 m-0 p-0 pl-2 pl-md-3">{{ fixture.team_b.club.short_name|default_if_none:fixture.team_b.club.name }}
+                                                - {{ fixture.team_b.short_name }}</p>
+                                            <p class="d-none d-lg-block col col-sm-3 m-0 p-0 pl-2 pl-md-3">{{ fixture.team_b.club.name }}
+                                                - {{ fixture.team_b.name }}</p>
+                                            <p class="col col-sm-3 col-md-2 col-xl-2 m-0 px-2">{{ fixture.date|date:"SHORT_DATE_FORMAT" }} {{ fixture.time|default_if_none:"TBA" }}</p>
+                                            <p class="d-none d-sm-block col col-3 col-md-2 m-0 px-2">{{ fixture.competition.parent_competition.short_name }} {{ fixture.competition.short_name }}</p>
+                                            <p class="d-none d-md-block col col-3 m-0 px-2">{{ fixture.venue.name }}</p>
+                                            <p class="col-3 col-sm-2 m-0 px-2"><a role="button"
+                                                                                  class="btn btn-sm btn-success"
+                                                                                  href="/fixtures/{{ fixture.id }}">View</a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
-                    {% endfor %}
                 </div>
-            </div>
 
+
+            </div>
         </div>
+
     </div>
+
+{% endblock %}
+
+{% block scripts %}
 
 {% endblock %}

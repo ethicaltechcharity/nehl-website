@@ -4,7 +4,11 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Home</title>
+    <title>
+    {% block title %}
+
+    {% endblock %}
+    </title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
@@ -35,7 +39,7 @@
                     <li class="nav-item"><a class="nav-link text-white" href="{% url 'index' %}">Home</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="{% url 'clubs:index' %}">Clubs</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="{% url 'rules' %}">Rules</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="#">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{% url 'contact' %}">Contact</a></li>
                     {% if user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link text-white" href="/accounts/profile">My Profile</a></li>
                     {% else %}
@@ -66,6 +70,11 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
     {%  block scripts %}
 
     {% endblock %}

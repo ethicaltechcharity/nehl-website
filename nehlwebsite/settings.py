@@ -19,11 +19,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'kja)=3vy7s&+snkdu!x1m20k!4ai$ajn*!xf5&zu8zf4t+hjct'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 # ALLOWED_HOSTS = ['nehl-web-env.pyrmmangss.eu-west-2.elasticbeanstalk.com', "127.0.0.1"]
@@ -126,6 +125,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -154,4 +154,9 @@ if not DEBUG:
 
     MEDIAFILES_LOCATION = 'media'
     DEFAULT_FILE_STORAGE = 'nehlwebsite.custom_storages.MediaStorage'
+
+    ALLOWED_HOSTS += os.environ['ALLOWED_HOST']
+else:
+    # SECURITY WARNING: keep the secret key used in production secret!
+    SECRET_KEY = 'kja)=3vy7s&+snkdu!x1m20k!4ai$ajn*!xf5&zu8zf4t+hjct'
 

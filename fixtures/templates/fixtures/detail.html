@@ -2,6 +2,13 @@
 
 {% load static %}
 
+{% block title %}
+
+    {{ fixture.team_a.club.short_name|default_if_none:fixture.team_a.club.name }} vs.
+    {{ fixture.team_b.club.short_name|default_if_none:fixture.team_b.club.name }}
+
+{% endblock %}
+
 {% block css %}
 
     <link rel="stylesheet" type="text/css" href="{% static 'fixtures/style.css' %}">
@@ -24,26 +31,32 @@
         <div class="row m-0 p-0">
             <div class="col-5 fixture-banner d-flex align-items-center justify-content-end">
                 <div class="d-none d-md-block">
-                    <h2 class="text-right">{{ fixture.team_a.club.name }}</h2>
+                    <a href="{% url 'clubs:detail' fixture.team_a.club.id %}" class="no-underline"><h2
+                            class="text-right text-dark">{{ fixture.team_a.club.name }}</h2></a>
                     <h3 class="text-right">{{ fixture.team_a.name }}</h3>
                 </div>
                 <div class="d-block d-md-none">
-                    <h2 class="text-right">{{ fixture.team_a.club.short_name|default_if_none:fixture.team_a.club.name }}</h2>
+                    <a href="{% url 'clubs:detail' fixture.team_a.club.id %}" class="no-underline"><h2
+                            class="text-right text-dark">{{ fixture.team_a.club.short_name|default_if_none:fixture.team_a.club.name }}</h2>
+                    </a>
                     <h3 class="text-right">{{ fixture.team_a.short_name }}</h3>
                 </div>
             </div>
             <div class="col-2 d-flex align-items-center justify-content-center">
                 <div class="d-flex versus bg-dark justify-content-center">
-                    <h5 class="text-center text-white align-self-center m-0">0 - 0</h5>
+                    <h5 class="text-center text-white align-self-center m-0">VS</h5>
                 </div>
             </div>
             <div class="col-5 d-flex align-items-center">
                 <div class="d-none d-md-block">
-                    <h2>{{ fixture.team_b.club.name }}</h2>
+                    <a href="{% url 'clubs:detail' fixture.team_b.club.id %}" class="no-underline"><h2
+                            class="text-dark">{{ fixture.team_b.club.name }}</h2></a>
                     <h3>{{ fixture.team_b.name }}</h3>
                 </div>
                 <div class="d-block d-md-none">
-                    <h2>{{ fixture.team_b.club.short_name|default_if_none:fixture.team_b.club.name }}</h2>
+                    <a href="{% url 'clubs:detail' fixture.team_b.club.id %}" class="no-underline"><h2
+                            class="text-dark">{{ fixture.team_b.club.short_name|default_if_none:fixture.team_b.club.name }}</h2>
+                    </a>
                     <h3>{{ fixture.team_b.short_name }}</h3>
                 </div>
             </div>
@@ -61,66 +74,82 @@
 
         <hr class="mb-4"/>
 
+        <div class="alert alert-warning" role="alert">
+            This page is under development, more features will be added soon.
+        </div>
+
         <div class="row">
             <div class="col-12 col-md-8 mb-3">
-                <div class="card">
-                    <div class="card-header">
-                        Venue
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="row m-0">
-                            <div class="col-12 col-sm-4 p-3">
-                                <h5>{{ fixture.venue.name }}</h5>
-                                <address>{{ fixture.venue.street_name }}<br/>
-                                    {{ fixture.venue.postcode }}
-                                </address>
-                                <a class="btn btn-success" href="#" role="button">Directions</a>
-                            </div>
-                            <div class="col-8">
+                {% if fixture.venue %}
+                    <div class="card">
+                        <div class="card-header">
+                            Venue
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="row m-0">
+                                <div class="col-12 col-sm-4 p-3">
+                                    <h5>{{ fixture.venue.name }}</h5>
+                                    <address>{{ fixture.venue.street_name }}<br/>
+                                        {{ fixture.venue.postcode }}
+                                    </address>
+                                    <a class="btn btn-success" href="#" role="button">Directions</a>
+                                </div>
+                                <div class="col-8">
 
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                {% endif %}
             </div>
             <div class="col-12 col-md-4">
                 <div class="row">
                     <div class="col-12 col-sm-6 col-md-12">
                         <div class="dropdown mb-3">
-                            <button class="btn btn-block btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Manage Fixture
-                            </button>
+                            {% if can_manage %}
+                                <button class="btn btn-block btn-primary dropdown-toggle" type="button"
+                                        id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Manage Fixture
+                                </button>
+                            {% else %}
+                                <button class="btn btn-block btn-primary dropdown-toggle disabled" type="button"
+                                        id="dropdownMenuButton"
+                                        disabled>
+                                    Manage Fixture
+                                </button>
+                            {% endif %}
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Request Cancellation/Postponement</a>
-                                <a class="dropdown-item" href="#">Submit Match Card</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
+
+                                <a class="dropdown-item" href="{% url 'fixtures:cancel' fixture.id %}">Request
+                                    Cancellation/Postponement</a>
+                                <a class="dropdown-item disabled" href="#">Submit Match Card</a>
                             </div>
                         </div>
-                        <div class="card mb-3">
-                            <div class="card-header">
-                                Umpire A
-                            </div>
-                            <img src="..." class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Dan Baxter</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the
-                                    bulk of
-                            </div>
-                        </div>
+{#                        <div class="card mb-3">#}
+{#                            <div class="card-header">#}
+{#                                Umpire A#}
+{#                            </div>#}
+{#                            <img src="..." class="card-img-top" alt="...">#}
+{#                            <div class="card-body">#}
+{#                                <h5 class="card-title">Dan Baxter</h5>#}
+{#                                <p class="card-text">Some quick example text to build on the card title and make up the#}
+{#                                    bulk of#}
+{#                            </div>#}
+{#                        </div>#}
                     </div>
                     <div class="col-12 col-sm-6 col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                Umpire B
-                            </div>
-                            <img src="..." class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Jamie Noble</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the
-                                    bulk of
-                            </div>
-                        </div>
+{#                        <div class="card">#}
+{#                            <div class="card-header">#}
+{#                                Umpire B#}
+{#                            </div>#}
+{#                            <img src="..." class="card-img-top" alt="...">#}
+{#                            <div class="card-body">#}
+{#                                <h5 class="card-title">Jamie Noble</h5>#}
+{#                                <p class="card-text">Some quick example text to build on the card title and make up the#}
+{#                                    bulk of#}
+{#                            </div>#}
+{#                        </div>#}
                     </div>
 
                 </div>

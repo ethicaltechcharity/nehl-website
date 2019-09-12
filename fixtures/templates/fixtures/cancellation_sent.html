@@ -47,27 +47,14 @@
             </div>
         </div>
 
-        <div class="d-flex justify-content-center">
-            <p class="small m-0 text-center">Venue: {{ fixture.venue.name }}</p>
-        </div>
-        <div class="d-flex justify-content-center">
-            <p class="small m-0 text-center">
-                Competition: {{ fixture.competition.parent_competition|default_if_none:"" }} {{ fixture.competition.short_name }}</p>
-        </div>
-        <div class="d-flex justify-content-center mb-4">
-            <p class="small m-0 text-center">Date: {{ fixture.date }}</p>
-        </div>
-
-
         <h1 class="display-4">Cancel Fixture</h1>
 
         <hr />
 
-        <form action="" method="post">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <input type="submit" class="btn btn-success" value="Submit">
-        </form>
+
+        <div class="alert alert-success" role="alert">
+            Your cancellation request has been submitted.
+        </div>
 
     </div>
 

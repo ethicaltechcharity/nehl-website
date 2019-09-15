@@ -96,11 +96,11 @@ class Fixture(models.Model):
     umpire_a = models.ForeignKey('Umpire',
                                  related_name='fixtures_as_umpire_a',
                                  on_delete=models.SET_NULL,
-                                 null=True)
+                                 null=True, blank=True)
     umpire_b = models.ForeignKey('Umpire',
                                  related_name='fixtures_as_umpire_b',
                                  on_delete=models.SET_NULL,
-                                 null=True)
+                                 null=True, blank=True)
 
     def __str__(self):
         return self.date.__str__() + ' - ' + self.team_a.__str__() + " vs " + self.team_b.__str__()

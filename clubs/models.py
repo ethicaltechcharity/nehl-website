@@ -8,8 +8,8 @@ POSITION_TYPE_CHOICES = [
 
 
 class Club(models.Model):
-    name = models.CharField(max_length=30)
-    short_name = models.CharField(max_length=6, null=True)
+    name = models.CharField(max_length=60)
+    short_name = models.CharField(max_length=12, null=True)
     primary_colour = models.CharField(max_length=7)
     secondary_colour = models.CharField(max_length=7)
     venues = models.ManyToManyField('fixtures.Venue',

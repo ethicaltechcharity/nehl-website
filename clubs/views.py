@@ -12,10 +12,6 @@ def index(request):
     return render(request, 'clubs/index.html', {'clubs': clubs})
 
 
-def view(request):
-    return render(request, 'clubs/view.html')
-
-
 def detail(request, club_id):
     club = get_object_or_404(Club, pk=club_id)
     can_manage_club = False
@@ -30,8 +26,15 @@ def detail(request, club_id):
         except:
             pass
 
+    if club.secondary_colour == '#000000':
+        light_or_dark = 'dark'
+    else:
+        light_or_dark = 'light'
+
     return render(request, 'clubs/detail.html',
-                  {'club': club, 'can_manage': can_manage_club})
+                  {'club': club,
+                   'can_manage': can_manage_club,
+                   'light_or_dark': light_or_dark})
 
 
 def manage(request, club_id):

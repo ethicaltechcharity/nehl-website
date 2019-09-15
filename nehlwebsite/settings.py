@@ -145,6 +145,7 @@ LOGIN_REDIRECT_URL = '/accounts/profile'
 
 EMAIL_BACKEND = 'django_ses.SESBackend'
 AWS_SES_REGION_NAME = 'eu-west-1'
+AWS_SES_REGION_ENDPOINT = 'email.eu-west-1.amazonaws.com'
 
 # you run `collectstatic`).
 

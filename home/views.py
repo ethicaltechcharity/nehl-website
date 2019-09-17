@@ -25,7 +25,7 @@ def contact(request):
             sender = "notifications@northeasthockeyleague.org"
             message = "The following message was sent from the web contact form: \r\n\r\n" + \
                       form.cleaned_data['message'] + "\r\n\r\n" + \
-                      "The message was sent by " + sender
+                      "The message was sent by " + form.cleaned_data['sender']
 
             nehl = get_object_or_404(Competition, pk=1)
 

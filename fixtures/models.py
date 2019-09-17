@@ -101,6 +101,7 @@ class Fixture(models.Model):
                                  related_name='fixtures_as_umpire_b',
                                  on_delete=models.SET_NULL,
                                  null=True, blank=True)
+    match_card_submission_url = models.CharField(max_length=300, null=True, blank=True)
 
     def __str__(self):
         return self.date.__str__() + ' - ' + self.team_a.__str__() + " vs " + self.team_b.__str__()

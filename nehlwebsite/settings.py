@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 # ALLOWED_HOSTS = ['nehl-web-env.pyrmmangss.eu-west-2.elasticbeanstalk.com', "127.0.0.1"]
@@ -146,6 +146,8 @@ LOGIN_REDIRECT_URL = '/accounts/profile'
 EMAIL_BACKEND = 'django_ses.SESBackend'
 AWS_SES_REGION_NAME = 'eu-west-1'
 AWS_SES_REGION_ENDPOINT = 'email.eu-west-1.amazonaws.com'
+DEFAULT_FROM_EMAIL = 'notifications@northeasthockeyleague.org'
+PASSWORD_RESET_TIMEOUT_DAYS = 7
 
 # you run `collectstatic`).
 

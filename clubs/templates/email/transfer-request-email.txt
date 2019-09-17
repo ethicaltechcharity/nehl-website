@@ -1,0 +1,5 @@
+User {{ request.submitter.user.firstname }} {{ request.submitter.user.firstname }}
+    ({{ request.submitter.user.email }})
+    of {{ request.submitter.club.name }} has requested the transfer of the following player:
+Name: {{ request.first_name }} {{ request.last_name }} DOB: {{ request.date_of_birth }}
+From {{ request.transfer_from.name }} to {{ request.transfer_to.name }}.

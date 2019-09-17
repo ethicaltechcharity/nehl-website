@@ -37,7 +37,7 @@ def send_cancellation_notifications(fixture: Fixture, cancellation: FixtureCance
             send_mail(
                 'Fixture Cancellation',
                 msg_plain,
-                'some@sender.com',
+                'notifications@northeasthockeyleague.org',
                 [official.holder.user.email],
                 html_message=msg_html,
             )
@@ -54,7 +54,7 @@ def send_cancellation_notifications(fixture: Fixture, cancellation: FixtureCance
     ultimate_parent_competition = get_most_senior_parent_competition(competition)
 
     notify_officials(ultimate_parent_competition)
-    notify_clubs(fixture)
+    # notify_clubs(fixture)
 
 
 

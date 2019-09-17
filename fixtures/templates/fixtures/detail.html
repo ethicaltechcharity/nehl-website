@@ -123,7 +123,12 @@
 
                                 <a class="dropdown-item" href="{% url 'fixtures:cancel' fixture.id %}">Request
                                     Cancellation/Postponement</a>
-                                <a class="dropdown-item disabled" href="#">Submit Match Card</a>
+                                <a class="dropdown-item" target="_blank" href="{% static '2019_20-NEHL-ResultCard.pdf' %}">Download Match Card PDF</a>
+                                {% if fixture.match_card_submission_url %}
+                                    <a class="dropdown-item" target="_blank" href="{{ fixture.match_card_submission_url }}">Submit Match Card</a>
+                                {% else %}
+                                    <a class="dropdown-item disabled" href="#">Submit Match Card</a>
+                                {% endif %}
                             </div>
                         </div>
 {#                        <div class="card mb-3">#}

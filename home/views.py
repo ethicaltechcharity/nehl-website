@@ -9,10 +9,6 @@ def index(request):
     return render(request, 'home/index.html')
 
 
-def profile(request):
-    return render(request, 'registration/profile.html')
-
-
 def rules(request):
     nehl = get_object_or_404(Competition, pk=1)
     return render(request, 'home/rules.html', {"competition": nehl})

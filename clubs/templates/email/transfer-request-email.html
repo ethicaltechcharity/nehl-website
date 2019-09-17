@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fixture Cancellation Notification</title>
+</head>
+<body>
+<p>User {{ request.submitter.user.first_name }} {{ request.submitter.user.last_name }}
+    ({{ request.submitter.user.email }})
+    of {{ request.submitter.club.name }} has requested the transfer of the following player:</p>
+<p>Name: {{ request.first_name }} {{ request.last_name }} DOB: {{ request.date_of_birth }}</p>
+<p>From {{ request.transfer_from.name }} to {{ request.transfer_to.name }}.</p>
+</body>
+</html>

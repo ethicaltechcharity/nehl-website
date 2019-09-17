@@ -55,4 +55,4 @@ class TransferRequest(models.Model):
         Club, on_delete=models.SET_NULL, null=True, related_name='transfers_to')
     transfer_from = models.ForeignKey(
         Club, on_delete=models.SET_NULL, null=True, related_name='transfers_from')
-    evidence = models.FileField()
+    evidence = models.FileField(null=True)

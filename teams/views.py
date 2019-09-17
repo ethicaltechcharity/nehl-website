@@ -25,10 +25,16 @@ def detail(request, team_id):
     upcoming_fixtures = fixtures.filter(Q(date__gte=now))
     past_fixtures = fixtures.filter(Q(date__lt=now))
 
+    if team.club.secondary_colour == '#000000':
+        light_or_dark = 'dark'
+    else:
+        light_or_dark = 'light'
+
     return render(request, 'teams/detail.html',
                   {
                       'team': team,
                       'upcoming_fixtures': upcoming_fixtures,
                       'past_fixtures': past_fixtures,
-                      'can_manage': can_manage_team
+                      'can_manage': can_manage_team,
+                      'light_or_dark': light_or_dark
                   })

@@ -7,4 +7,4 @@ class TransferRequestForm(forms.Form):
     last_name = forms.CharField(max_length=30)
     date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     transfer_from = forms.ModelChoiceField(queryset=Club.objects.all())
-    evidence = forms.FileField()
+    evidence = forms.FileField(required=False)

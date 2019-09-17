@@ -4,7 +4,7 @@
 
 {% block css %}
 
-    <link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'nehlwebsite/style.css' %}">
 
 {% endblock %}
 
@@ -24,12 +24,12 @@
                             <li class="list-group-item"><strong>Username:</strong> {{ user.username }}</li>
                             <li class="list-group-item"><strong>Date joined:</strong> {{ user.date_joined }}</li>
                         </ul>
-                        <a href="{% url 'accounts:logout' %}" role="button" class="btn btn-success mt-2">
+                        <a href="{% url 'logout' %}" role="button" class="btn btn-success mt-2">
                             Log Out
                         </a>
                     </div>
                     <div class="card-footer">
-                        Edit my details
+                        <a href="{% url 'password_reset' %}">Reset Password</a>
                     </div>
                 </div>
             </div>
@@ -67,29 +67,29 @@
             </div>
 
         </div>
-        <div class="row mt-3">
-            <div class="col-12 col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        My Team
-                    </div>
-                    {% if user.member.squads %}
-                        <div class="card-body px-0 pb-1">
-                            <h3 class="ml-4 mb-4 card-title">
-                                {{ user.member.squads.first.name }}
-                            </h3>
-                        </div>
-                        <div class="card-footer">
-                            <a href="{% url 'teams:detail' user.member.squads.first.id %}">Details</a>
-                        </div>
-                    {% else %}
-                        <div class="card-body">
-                            <h5>You have not been assigned a team</h5>
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
+{#        <div class="row mt-3">#}
+{#            <div class="col-12 col-md-6">#}
+{#                <div class="card">#}
+{#                    <div class="card-header">#}
+{#                        My Team#}
+{#                    </div>#}
+{#                    {% if user.member.squads %}#}
+{#                        <div class="card-body px-0 pb-1">#}
+{#                            <h3 class="ml-4 mb-4 card-title">#}
+{#                                {{ user.member.squads.first.name }}#}
+{#                            </h3>#}
+{#                        </div>#}
+{#                        <div class="card-footer">#}
+{#                            <a href="{% url 'teams:detail' user.member.squads.first.id %}">Details</a>#}
+{#                        </div>#}
+{#                    {% else %}#}
+{#                        <div class="card-body">#}
+{#                            <h5>You have not been assigned a team</h5>#}
+{#                        </div>#}
+{#                    {% endif %}#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
         {#        <div class="row mt-3">#}
         {#            <div class="col-12 col-sm-6">#}
         {#                 <div class="card">#}

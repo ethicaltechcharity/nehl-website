@@ -1,5 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseForbidden, HttpResponseBadRequest
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 from clubs.models import Club, TransferRequest
 from clubs.forms import TransferRequestForm
@@ -76,22 +78,35 @@ def request_transfer(request, club_id):
 
     if request.method == 'POST':
 
-        form = TransferRequestForm(request.POST)
+        form = TransferRequestForm(request.POST, request.FILES)
 
         if form.is_valid():
 
             now = datetime.datetime.now()
-            request = TransferRequest(
+            transfer_request = TransferRequest(
                 datetime_submitted=now,
                 submitter=user.member,
                 first_name=form.cleaned_data['first_name'],
                 last_name=form.cleaned_data['last_name'],
                 date_of_birth=form.cleaned_data['date_of_birth'],
-                transfer_from=form.transfer_from,
+                transfer_from=form.cleaned_data['transfer_from'],
                 transfer_to=user.member.club,
                 evidence=form.files['evidence']
             )
-            request.save()
+            transfer_request.save()
+
+            msg_html = render_to_string('email/transfer-request-email.html',
+                                        {'request': transfer_request})
+            msg_plain = render_to_string('email/transfer-request-email.txt',
+                                         {'request': transfer_request})
+
+            send_mail(
+                'Transfer Request',
+                msg_plain,
+                'notifications@northeasthockeyleague.org',
+                ['danbaxter@live.co.uk', 'danbaxter@live.co.uk'],
+                html_message=msg_html,
+            )
 
             return render(request, 'clubs/members/transfer-request-sent.html')
 

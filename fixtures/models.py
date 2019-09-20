@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 
+from fixtures.utils.general import get_file_path
+
 
 class Season(models.Model):
     years = models.CharField(max_length=6)
@@ -116,6 +118,11 @@ class FixtureCancellation(models.Model):
 
     def __str__(self):
         return self.fixture.__str__()
+
+
+class MatchCardImage(models.Model):
+    image = models.FileField(upload_to=get_file_path, unique=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
 
 
 class Official(models.Model):

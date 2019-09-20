@@ -1,4 +1,5 @@
 from django import forms
+from fixtures.models import MatchCardImage
 
 
 CANCELLATION_REASON_CHOICES = [
@@ -20,3 +21,8 @@ class FixtureCancellationForm(forms.Form):
         max_length=150
     )
 
+
+class MatchCardImageForm(forms.ModelForm):
+    class Meta:
+        model = MatchCardImage
+        fields = ('image', )

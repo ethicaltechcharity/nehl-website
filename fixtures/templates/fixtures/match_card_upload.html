@@ -1,0 +1,28 @@
+{% extends 'nehlwebsite/base.html' %}
+
+{% load static %}
+{% load crispy_forms_filters %}
+
+{% block css %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'fixtures/style.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+
+        <div class="jumbotron">
+              <h1 class="display-4">Submit Match Card Image</h1>
+        </div>
+
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input type="submit" class="btn btn-success" value="Submit">
+        </form>
+
+    </div>
+
+{% endblock %}

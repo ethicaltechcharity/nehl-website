@@ -1,9 +1,9 @@
 import datetime
 
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 
-from fixtures.forms import FixtureCancellationForm
+from fixtures.forms import FixtureCancellationForm, MatchCardImageForm
 from fixtures.models import Fixture, FixtureCancellation
 
 
@@ -65,7 +65,17 @@ def cancel(request, fixture_id):
 
 
 def card_original(request):
-    return HttpResponse('')
+
+    if request.method == 'POST':
+        form = MatchCardImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return render(request, 'fixtures/match_card_upload_success.html', {})
+    else:
+        form = MatchCardImageForm()
+    return render(request, 'fixtures/match_card_upload.html', {
+        'form': form
+    })
 
 
 def detail(request, fixture_id):

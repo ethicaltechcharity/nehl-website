@@ -7,7 +7,7 @@ import datetime
 
 def detail(request, team_id):
     team = get_object_or_404(Team, pk=team_id)
-    fixtures = Fixture.objects.filter(Q(team_a_id=team_id) | Q(team_b_id=team_id))
+    fixtures = Fixture.objects.filter(Q(team_a_id=team_id) | Q(team_b_id=team_id)).order_by('date')
     can_manage_team = False
     user = request.user
 

@@ -22,6 +22,11 @@
             {{ form|crispy }}
             <input type="submit" class="btn btn-success" value="Submit">
         </form>
+
+        <div class="mt-2" >
+            <a href="{% url 'password_reset' %}">Forgotten your password?</a>
+        </div>
+
     </div>
 
 {% endblock %}

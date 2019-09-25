@@ -1,0 +1,51 @@
+{% extends 'nehlwebsite/base.html' %}
+
+{% load static %}
+{% load crispy_forms_filters %}
+
+{% block css %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'fixtures/style.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid">
+
+        <div class="jumbotron">
+              <h1 class="display-4">Cancellations</h1>
+        </div>
+
+        <div class="row">
+            <table class="table table-striped table-responsive">
+                <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Fixture</th>
+                    <th scope="col">User</th>
+                    <th scope="col">Reason</th>
+                    <th scope="col">Info</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for cancellation in cancellations %}
+                <tr>
+                    <td>{{ cancellation.datetime_cancelled }}</td>
+                    <td>{{ cancellation.fixture }}</td>
+                    <td>{{ cancellation.cancellation_reporter.user.first_name }} {{ cancellation.cancellation_reporter.user.last_name }}</td>
+                    <td>{{ cancellation.cancellation_reason }}</td>
+                    <td>{{ cancellation.more_info }}</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" href="#" role="button">More Info</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+{% endblock %}

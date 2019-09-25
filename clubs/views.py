@@ -82,6 +82,11 @@ def request_transfer(request, club_id):
 
         if form.is_valid():
 
+            if 'evidence' in form.files:
+                evidence = form.files['evidence']
+            else:
+                evidence = None
+
             now = datetime.datetime.now()
             transfer_request = TransferRequest(
                 datetime_submitted=now,
@@ -91,7 +96,7 @@ def request_transfer(request, club_id):
                 date_of_birth=form.cleaned_data['date_of_birth'],
                 transfer_from=form.cleaned_data['transfer_from'],
                 transfer_to=user.member.club,
-                evidence=form.files['evidence']
+                evidence=evidence
             )
             transfer_request.save()
 

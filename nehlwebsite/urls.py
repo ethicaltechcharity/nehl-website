@@ -22,7 +22,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
     path('clubs/', include('clubs.urls')),
-    path('fixtures/', include('fixtures.urls')),
+    path('fixtures/', include('fixtures.urls.fixtures')),
+    path('fixtures/cancellations', include('fixtures.urls.cancellations')),
     path('teams/', include('teams.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/profile', views.profile, name='profile')

@@ -9,6 +9,6 @@
     ({{ request.submitter.user.email }})
     of {{ request.submitter.club.name }} has requested the transfer of the following player:</p>
 <p>Name: {{ request.first_name }} {{ request.last_name }} DOB: {{ request.date_of_birth }}</p>
-<p>From {{ request.transfer_from.name|default_if_none: "Non-NEHL Club" }} to {{ request.transfer_to.name }}.</p>
+<p>From {{ request.transfer_from.name|default_if_none:"Non-NEHL Club" }} to {{ request.transfer_to.name }}.</p>
 </body>
 </html>

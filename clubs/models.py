@@ -21,6 +21,14 @@ class Club(models.Model):
     management = models.ManyToManyField('Member',
                                         related_name='management_position',
                                         through='ClubManagementPosition')
+    main_contact = models.ForeignKey('Member',
+                                     related_name='main_contact_for',
+                                     on_delete=models.SET_NULL,
+                                     null=True)
+    fixture_coordinator = models.ForeignKey('Member',
+                                            related_name='fixture_coordinator_for',
+                                            on_delete=models.SET_NULL,
+                                            null=True)
 
     def __str__(self):
         return self.name

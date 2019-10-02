@@ -57,4 +57,13 @@ def send_cancellation_notifications(fixture: Fixture, cancellation: FixtureCance
     # notify_clubs(fixture)
 
 
+def can_manage_cancellation(cancellation: FixtureCancellation, user_id):
 
+    a_fixture = cancellation.fixture
+    for official in a_fixture.competition.officials.all():
+        if official.user.id == user_id:
+            return True
+    parent_competition = get_most_senior_parent_competition(a_fixture.competition)
+    for official in parent_competition.officials.all():
+        if official.user.id == user_id:
+            return True

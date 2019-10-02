@@ -14,7 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.staticfiles.urls import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
+
+from . import settings
 
 from nehlwebsite import views
 
@@ -23,8 +27,10 @@ urlpatterns = [
     path('', include('home.urls')),
     path('clubs/', include('clubs.urls')),
     path('fixtures/', include('fixtures.urls.fixtures')),
-    path('fixtures/cancellations', include('fixtures.urls.cancellations')),
+    path('fixtures/cancellations/', include('fixtures.urls.cancellations')),
     path('teams/', include('teams.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/profile', views.profile, name='profile')
 ]
+
+# urlpatterns += path(settings.MEDIAFILES_LOCATION, 'https://nehl-web-files.s3.eu-west-2.amazonaws.com/')

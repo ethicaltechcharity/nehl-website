@@ -6,12 +6,14 @@
 </head>
 <body>
 <p>User {{ cancellation.cancellation_reporter.user.first_name }} {{ cancellation.cancellation_reporter.user.last_name }}
+    ({{ cancellation.cancellation_reporter.user.email }})
     of {{ cancellation.cancellation_reporter.club.name }} has requested the following fixture be
-    cancelled due to {{ cancellation.cancellation_reason }}.</p>
+    cancelled on behalf of {{ cancellation.cancelled_by_team }} due to {{ cancellation.cancellation_reason }}.</p>
 <p>Fixture: {{ fixture.date }} - {{ fixture.team_a.club.name }} {{ fixture.team_a.name }}
     vs {{ fixture.team_b.club.name }} {{ fixture.team_b.name }}</p>
 {% if cancellation.more_info %}
 <p>More Information: {{ cancellation.more_info }}</p>
 {% endif %}
+
 </body>
 </html>

@@ -1,0 +1,40 @@
+{% extends 'nehlwebsite/base.html' %}
+
+{% load static %}
+{% load crispy_forms_filters %}
+
+{% block css %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'fixtures/style.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+
+        <div class="jumbotron">
+              <h3 class="display-4">Cancellations</h3>
+        </div>
+
+        <div class="list-group">
+            <div class="list-group-item">
+                <div class="row">
+                    <p class="col">Date Uploaded</p>
+                    <p class="col">Link</p>
+                </div>
+            </div>
+            {% for card in match_cards %}
+            <div class="list-group-item">
+                <div class="row">
+                    <p class="col">{{ card.uploaded_at }}</p>
+                    <p class="col"><a href="{{ card.image.url }}">Link</a></p>
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -1,4 +1,4 @@
-User {{ cancellation.cancellation_reporter.user.first_name }} {{ cancellation.cancellation_reporter.user.last_name }} of {{ cancellation.cancellation_reporter.club.name }} has requested the following fixture be cancelled due to {{ cancellation.cancellation_reason }}.
+User {{ cancellation.cancellation_reporter.user.first_name }} {{ cancellation.cancellation_reporter.user.last_name }} of {{ cancellation.cancellation_reporter.club.name }} has requested the following fixture be cancelled on behalf of {{ cancellation.cancelled_by_team }} due to {{ cancellation.cancellation_reason }}.
 Fixture: {{ fixture.date }} - {{ fixture.team_a.club.name }} {{ fixture.team_a.name }} vs {{ fixture.team_b.club.name }} {{ fixture.team_b.name }}
 {% if cancellation.more_info %}
 More Information: {{ cancellation.more_info }}

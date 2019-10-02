@@ -6,6 +6,8 @@ from django.template.loader import render_to_string
 from clubs.models import Club, TransferRequest
 from clubs.forms import TransferRequestForm
 
+from nehlwebsite.utils.auth_utils import can_manage_club
+
 import datetime
 
 
@@ -16,17 +18,12 @@ def index(request):
 
 def detail(request, club_id):
     club = get_object_or_404(Club, pk=club_id)
-    can_manage_club = False
+    can_manage = False
     user = request.user
 
     if user.is_authenticated:
-        try:
-            if user.member is not None:
-                for position in user.member.management_position.all():
-                    if user.member.club_id == club.id:
-                        can_manage_club = True
-        except:
-            pass
+        if can_manage_club(user.id, club_id):
+            can_manage = True
 
     if club.secondary_colour == '#000000':
         light_or_dark = 'dark'
@@ -35,25 +32,20 @@ def detail(request, club_id):
 
     return render(request, 'clubs/detail.html',
                   {'club': club,
-                   'can_manage': can_manage_club,
+                   'can_manage': can_manage,
                    'light_or_dark': light_or_dark})
 
 
 def manage(request, club_id):
     club = get_object_or_404(Club, pk=club_id)
-    can_manage_club = False
+    can_manage = False
     user = request.user
 
     if user.is_authenticated:
-        try:
-            if user.member is not None:
-                for position in user.member.management_position.all():
-                    if user.member.club_id == club.id:
-                        can_manage_club = True
-        except:
-            pass
+        if can_manage_club(user.id, club_id):
+            can_manage = True
 
-    if not can_manage_club:
+    if not can_manage:
         return HttpResponseForbidden()
 
     return render(request, 'clubs/manage.html', {'club': club})
@@ -61,19 +53,14 @@ def manage(request, club_id):
 
 def request_transfer(request, club_id):
     club = get_object_or_404(Club, pk=club_id)
-    can_manage_club = False
+    can_manage = False
     user = request.user
 
     if user.is_authenticated:
-        try:
-            if user.member is not None:
-                for position in user.member.management_position.all():
-                    if user.member.club_id == club.id:
-                        can_manage_club = True
-        except:
-            pass
+        if can_manage_club(user.id, club_id):
+            can_manage = True
 
-    if not can_manage_club:
+    if not can_manage:
         return HttpResponseForbidden()
 
     if request.method == 'POST':
@@ -95,7 +82,7 @@ def request_transfer(request, club_id):
                 last_name=form.cleaned_data['last_name'],
                 date_of_birth=form.cleaned_data['date_of_birth'],
                 transfer_from=form.cleaned_data['transfer_from'],
-                transfer_to=user.member.club,
+                transfer_to=club,
                 evidence=evidence
             )
             transfer_request.save()
@@ -109,7 +96,7 @@ def request_transfer(request, club_id):
                 'Transfer Request',
                 msg_plain,
                 'notifications@northeasthockeyleague.org',
-                ['danbaxter@live.co.uk', 'danbaxter@live.co.uk'],
+                ['danbaxter@live.co.uk', 'leighbrown@hotmail.co.uk'],
                 html_message=msg_html,
             )
 

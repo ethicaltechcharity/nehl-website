@@ -3,3 +3,4 @@ User {{ request.submitter.user.firstname }} {{ request.submitter.user.firstname 
     of {{ request.submitter.club.name }} has requested the transfer of the following player:
 Name: {{ request.first_name }} {{ request.last_name }} DOB: {{ request.date_of_birth }}
 From {{ request.transfer_from.name|default_if_none:"Non-NEHL Club" }} to {{ request.transfer_to.name }}.
+Evidence at: {{ request.evidence.url }}

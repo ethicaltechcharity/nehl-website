@@ -114,10 +114,19 @@ class FixtureCancellation(models.Model):
     fixture = models.ForeignKey(Fixture, on_delete=models.CASCADE)
     datetime_cancelled = models.DateTimeField()
     cancellation_reason = models.CharField(max_length=30)
+    cancelled_by_team = models.ForeignKey('teams.Team', on_delete=models.SET_NULL, null=True)
     more_info = models.CharField(max_length=150)
+    response = models.ForeignKey('CancellationResponse', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.fixture.__str__()
+
+
+class CancellationResponse(models.Model):
+    response = models.CharField(max_length=20)
+    response_by = models.ForeignKey('fixtures.CompetitionOfficial', on_delete=models.SET_NULL, null=True)
+    additional_comments = models.CharField(max_length=1000)
+    time = models.DateTimeField(auto_now_add=True)
 
 
 class MatchCardImage(models.Model):
@@ -126,9 +135,7 @@ class MatchCardImage(models.Model):
 
 
 class Official(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL,
-                                on_delete=models.SET_NULL,
-                                null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
     class Meta:
         abstract = True

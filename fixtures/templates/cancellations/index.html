@@ -14,36 +14,35 @@
     <div class="container-fluid">
 
         <div class="jumbotron">
-              <h1 class="display-4">Cancellations</h1>
+              <h3 class="display-4">Cancellations</h3>
         </div>
 
-        <div class="row">
-            <table class="table table-striped table-responsive">
-                <thead>
-                <tr>
-                    <th scope="col">Date</th>
-                    <th scope="col">Fixture</th>
-                    <th scope="col">User</th>
-                    <th scope="col">Reason</th>
-                    <th scope="col">Info</th>
-                    <th scope="col">Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for cancellation in cancellations %}
-                <tr>
-                    <td>{{ cancellation.datetime_cancelled }}</td>
-                    <td>{{ cancellation.fixture }}</td>
-                    <td>{{ cancellation.cancellation_reporter.user.first_name }} {{ cancellation.cancellation_reporter.user.last_name }}</td>
-                    <td>{{ cancellation.cancellation_reason }}</td>
-                    <td>{{ cancellation.more_info }}</td>
-                    <td>
-                        <a class="btn btn-primary btn-sm" href="#" role="button">More Info</a>
-                    </td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+        <div class="list-group">
+            <div class="list-group-item">
+                <div class="row">
+                    <p class="d-none d-lg-block col-1" >Date of fixture</p>
+                    <p class="col-9 col-md-6 col-lg-3">Fixture</p>
+                    <p class="d-none d-lg-block col-1">User</p>
+                    <p class="d-none d-md-block col-3">Reason</p>
+                    <p class="d-none d-lg-block col-3">More Info</p>
+                    <p class="col-3 col-lg-1">Actions</p>
+                </div>
+            </div>
+            {% for cancellation in cancellations %}
+            <div class="list-group-item">
+                <div class="row">
+                    <p class="d-none d-lg-block col-1">{{ cancellation.fixture.date|date:"SHORT_DATE_FORMAT" }}</p>
+                    <p class="col-9 col-md-6 col-lg-3">{{ cancellation.fixture.team_a.club.short_name|default_if_none:cancellation.fixture.team_a.club.name }} {{ cancellation.fixture.team_a.short_name }} vs {{ cancellation.fixture.team_b.club.short_name|default_if_none:cancellation.fixture.team_b.club.name}} {{ cancellation.fixture.team_b.short_name }}</p>
+                    <p class="d-none d-lg-block col-1">{{ cancellation.cancellation_reporter.user.first_name }} {{ cancellation.cancellation_reporter.user.last_name }}</p>
+                    <p class="d-none d-md-block col-3">{{ cancellation.cancellation_reason }}</p>
+                    <p class="d-none d-lg-block col-3">{{ cancellation.more_info }}</p>
+                    <p class="col-3 col-lg-1">
+                        <a class="btn btn-primary btn-sm" href="{% url 'cancellations:detail' cancellation.id %}" role="button">Detail</a>
+                    </p>
+                </div>
+            </div>
+
+            {% endfor %}
         </div>
 
     </div>

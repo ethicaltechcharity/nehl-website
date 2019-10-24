@@ -5,6 +5,7 @@ from fixtures.forms import CancellationResponseForm
 from fixtures.utils.cancellations import can_manage_cancellation
 
 from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.core.paginator import Paginator
 
 
 def index(request):
@@ -18,6 +19,11 @@ def index(request):
 
     if not can_manage:
         return HttpResponseForbidden()
+
+    paginator = Paginator(cancellations, 10)
+
+    page = request.GET.get('page')
+    cancellations = paginator.get_page(page)
 
     return render(request, 'cancellations/index.html', {'cancellations': cancellations})
 

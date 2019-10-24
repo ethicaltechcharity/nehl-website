@@ -11,61 +11,64 @@
 {% block content %}
 
     <div class="container">
-        <div class="row mt-3">
-
-            <div class="col-12 col-md-6 mb-3 mb-md-0">
-                <div class="card">
-                    <div class="card-header">
-                        My Details
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-group">
-                            <li class="list-group-item"><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</li>
-                            <li class="list-group-item"><strong>Username:</strong> {{ user.username }}</li>
-                            <li class="list-group-item"><strong>Date joined:</strong> {{ user.date_joined }}</li>
-                        </ul>
-                        <a href="{% url 'logout' %}" role="button" class="btn btn-success mt-2">
-                            Log Out
-                        </a>
+        <div class="card-columns mt-3">
+            <div class="card">
+                <div class="card-header">
+                    My Details
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</li>
+                        <li class="list-group-item"><strong>Username:</strong> {{ user.username }}</li>
+                        <li class="list-group-item"><strong>Date joined:</strong> {{ user.date_joined }}</li>
+                    </ul>
+                    <a href="{% url 'logout' %}" role="button" class="btn btn-success mt-2">
+                        Log Out
+                    </a>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'password_reset' %}">Reset Password</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    My Club
+                </div>
+                {% if user.member.club %}
+                    <div class="card-body px-0 pb-1">
+                        <h3 class="ml-4 mb-4 card-title">
+                            {{ user.member.club.name }}
+                        </h3>
+                        <div class="list-group rounded-0">
+                            <a class="disabled rounded-0 bg-light list-group-item border-left-0 border-right-0">
+                                Teams
+                            </a>
+                            {% for team in user.member.club.team_set.all %}
+                                <a href="{% url 'teams:detail' team.id %}"
+                                   class="rounded-0 list-group-item list-group-item-action border-left-0 border-right-0">
+                                    {{ team.name }}
+                                </a>
+                            {% endfor %}
+                        </div>
                     </div>
                     <div class="card-footer">
-                        <a href="{% url 'password_reset' %}">Reset Password</a>
+                        <a href="{% url 'clubs:detail' user.member.club.id %}">View Club</a>
                     </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        My Club
+                {% else %}
+                    <div class="card-body">
+                        <h5>You have not been assigned a club</h5>
                     </div>
-                    {% if user.member.club %}
-                        <div class="card-body px-0 pb-1">
-                            <h3 class="ml-4 mb-4 card-title">
-                                {{ user.member.club.name }}
-                            </h3>
-                            <div class="list-group rounded-0">
-                                <a class="disabled rounded-0 bg-light list-group-item border-left-0 border-right-0">
-                                    Teams
-                                </a>
-                                {% for team in user.member.club.team_set.all %}
-                                    <a href="{% url 'teams:detail' team.id %}"
-                                       class="rounded-0 list-group-item list-group-item-action border-left-0 border-right-0">
-                                        {{ team.name }}
-                                    </a>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <a href="{% url 'clubs:detail' user.member.club.id %}">View Club</a>
-                        </div>
-                    {% else %}
-                        <div class="card-body">
-                            <h5>You have not been assigned a club</h5>
-                        </div>
-                    {% endif %}
-                </div>
+                {% endif %}
             </div>
-
+{#            {% if user.member %}#}
+{#            <div class="card">#}
+{#                <div class="card-header">#}
+{#                    Competition Management#}
+{#                </div>#}
+{##}
+{##}
+{#            </div>#}
+{#            {% endif %}#}
         </div>
 {#        <div class="row mt-3">#}
 {#            <div class="col-12 col-md-6">#}

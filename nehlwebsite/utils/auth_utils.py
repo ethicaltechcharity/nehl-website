@@ -17,14 +17,15 @@ def can_manage_club(user_id: int, club_id: int) -> bool:
                 if user.member.club_id == club_id or user.member.club_id == club_id:
                     return True
         for team in club.team_set.all():
-            a_fixture = team.team_a_fixtures.first()
-            for official in a_fixture.competition.officials.all():
-                if official.user.id == user_id:
-                    return True
-            parent_competition = get_most_senior_parent_competition(a_fixture.competition)
-            for official in parent_competition.officials.all():
-                if official.user.id == user_id:
-                    return True
+            if team.team_a_fixtures.count() > 0:
+                a_fixture = team.team_a_fixtures.first()
+                for official in a_fixture.competition.officials.all():
+                    if official.user.id == user_id:
+                        return True
+                parent_competition = get_most_senior_parent_competition(a_fixture.competition)
+                for official in parent_competition.officials.all():
+                    if official.user.id == user_id:
+                        return True
     except:
         return False
 

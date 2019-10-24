@@ -62,6 +62,10 @@ textarea {
   text-decoration: none !important;
 }
 
+.card-columns {
+  column-count: 2;
+}
+
 body {
   padding-top: 82px;
 }

@@ -2,6 +2,8 @@ import datetime
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
+from django.core.paginator import Paginator
+
 
 from fixtures.forms import FixtureCancellationForm, MatchCardImageForm
 from fixtures.models import Fixture, FixtureCancellation, MatchCardImage
@@ -85,7 +87,12 @@ def card_original(request):
 
 
 def match_card_originals(request):
-    match_cards = MatchCardImage.objects.all()
+    match_card_list = MatchCardImage.objects.order_by('-uploaded_at').all()
+
+    paginator = Paginator(match_card_list, 25)
+
+    page = request.GET.get('page')
+    match_cards = paginator.get_page(page)
 
     return render(request, 'fixtures/match_card_originals.html', {
         'match_cards': match_cards
@@ -98,9 +105,9 @@ def detail(request, fixture_id):
     user = request.user
 
     if user.is_authenticated:
-        if can_manage_club(user.id, fixture.team_a.club_id):
+        if can_manage_club(user.id, fixture.team_a.club.id):
             can_manage_fixture = True
-        if can_manage_club(user.id, fixture.team_b.club_id):
+        if can_manage_club(user.id, fixture.team_b.club.id):
             can_manage_fixture = True
 
     return render(request, 'fixtures/detail.html', {'fixture': fixture, 'can_manage': can_manage_fixture})

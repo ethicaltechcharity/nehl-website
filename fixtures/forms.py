@@ -46,4 +46,10 @@ class CancellationResponseForm(forms.ModelForm):
 class MatchCardImageForm(forms.ModelForm):
     class Meta:
         model = MatchCardImage
-        fields = ('image', )
+        fields = ('image', 'name')
+        labels = {
+            'name': 'Fixture Name',
+        }
+        help_texts = {
+            'name': 'eg. Carlisle 1s vs. Furness 3s',
+        }

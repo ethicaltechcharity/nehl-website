@@ -131,6 +131,7 @@ class CancellationResponse(models.Model):
 
 class MatchCardImage(models.Model):
     image = models.FileField(upload_to=get_file_path, unique=True)
+    name = models.CharField(max_length=50, null=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
 

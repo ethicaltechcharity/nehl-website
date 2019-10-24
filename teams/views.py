@@ -1,7 +1,12 @@
 from django.shortcuts import get_object_or_404, render
-from teams.models import Team
-from fixtures.models import Fixture
 from django.db.models import Q
+
+from nehlwebsite.utils.auth_utils import can_manage_club
+
+from teams.models import Team
+
+from fixtures.models import Fixture
+
 import datetime
 
 
@@ -12,13 +17,8 @@ def detail(request, team_id):
     user = request.user
 
     if user.is_authenticated:
-        try:
-            if user.member is not None:
-                for position in user.member.management_position.all():
-                    if user.member.club_id == team.club.id:
-                        can_manage_team = True
-        except:
-            pass
+        if can_manage_club(user.id, team.club.id):
+            can_manage_team = True
 
     now = datetime.datetime.now()
 

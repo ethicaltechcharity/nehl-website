@@ -1,71 +1,4 @@
 @charset "UTF-8";
-body {
-  padding-bottom: 20px;
-}
-
-/* Set padding to keep content from hitting the edges */
-.body-content {
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
-/* Override the default bootstrap behavior where horizontal description lists
-   will truncate terms that are too long to fit in the left column
-*/
-.dl-horizontal dt {
-  white-space: normal;
-}
-
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-  max-width: 280px;
-}
-
-/* CSS Document */
-.header {
-  background-color: #62268a;
-  position: fixed;
-  top: 0;
-  z-index: 1;
-  width: 100%;
-}
-
-.footer {
-  height: 100px;
-  background-color: #454746;
-}
-
-.footer p {
-  color: #FFF;
-  padding-top: 40px;
-}
-
-.navbar {
-  background-color: #62268a;
-}
-
-#hamburger-icon {
-  color: #FFF;
-}
-
-.padding-zero {
-  padding: 0 !important;
-}
-
-.asteriskField {
-  display: none;
-}
-
-.no-underline {
-  text-decoration: none !important;
-}
-
-body {
-  padding-top: 82px;
-}
-
 /*!
  * Bootstrap v4.3.1 (https://getbootstrap.com/)
  * Copyright 2011-2019 The Bootstrap Authors
@@ -9720,6 +9653,82 @@ h3 {
   .table .thead-dark th {
     color: inherit;
     border-color: #dee2e6;
+  }
+}
+body {
+  padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists
+   will truncate terms that are too long to fit in the left column
+*/
+.dl-horizontal dt {
+  white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+  max-width: 280px;
+}
+
+/* CSS Document */
+.header {
+  background-color: #62268a;
+  position: fixed;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+}
+
+.footer {
+  height: 100px;
+  background-color: #454746;
+}
+
+.footer p {
+  color: #FFF;
+  padding-top: 40px;
+}
+
+.navbar {
+  background-color: #62268a;
+}
+
+#hamburger-icon {
+  color: #FFF;
+}
+
+.padding-zero {
+  padding: 0 !important;
+}
+
+.asteriskField {
+  display: none;
+}
+
+.no-underline {
+  text-decoration: none !important;
+}
+
+.card-columns {
+  column-count: 1 !important;
+}
+
+body {
+  padding-top: 82px;
+}
+
+@media (min-width: 768px) {
+  .card-columns {
+    column-count: 2 !important;
   }
 }
 

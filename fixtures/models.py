@@ -42,6 +42,9 @@ class Rule(models.Model):
     number = models.IntegerField()
     penalty = models.ManyToManyField('Penalty', blank=True)
 
+    class Meta:
+        ordering = ['number']
+
     def __str__(self):
         return self.ruleset_set.first().__str__() + " - " + self.number.__str__()
 
@@ -51,6 +54,9 @@ class RuleSet(models.Model):
     name = models.CharField(max_length=50)
     rules = models.ManyToManyField('Rule', blank=True)
 
+    class Meta:
+        ordering = ['number']
+
     def __str__(self):
         return self.name
 
@@ -59,6 +65,9 @@ class RuleParagraph(models.Model):
     number = models.IntegerField()
     content = models.CharField(max_length=500)
     rule = models.ForeignKey('Rule', on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['number']
 
     def __str__(self):
         return self.content

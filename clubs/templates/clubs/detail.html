@@ -60,7 +60,7 @@
 
         <div class="row m-0 p-0 pt-3 justify-content-end">
             <div class="col-12 col-sm-4 m-0 p-0 h-100">
-                <div class="card rounded-0 p-0 m-0 border-0">
+                <div class="card rounded-0 p-0 m-0 border-0 mb-3">
                     <div class="card-header border rounded-0">
                         Teams
                     </div>
@@ -73,12 +73,43 @@
                         {% endfor %}
                     </div>
                 </div>
+                {% if club.dashboard_link %}
+                    <div class="card rounded-0 p-0 m-0">
+                        <div class="card-header rounded-0">
+                            Links
+                        </div>
+                        <div class="card-body">
+                            <a class="btn btn-primary" href="{{ club.dashboard_link }}" role="button" target="_blank">Statistics</a>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
 
-            {% if user.is_authenticated %}
-                <div class="col-sm-8 pr-0 mx-0 pt-3 pl-0 pt-sm-0 pl-sm-3 mb-3">
-                    {% if club.management %}
+
+            <div class="col-sm-8 pr-0 mx-0 pt-3 pl-0 pt-sm-0 pl-sm-3 mb-3">
+                {% if club.main_venue %}
+                <div class="pr-0 mx-0 pt-3 pl-0 pt-sm-0 mb-3">
+
                         <div class="card rounded-0 p-0 m-0 border-0">
+                            <div class="card-header border rounded-0">
+                                Main Venue
+                            </div>
+                            <div class="card-body border border-top-0">
+
+                                <h4>{{ club.main_venue.name }}</h4>
+                                <address class="my-2">
+                                    {{ club.main_venue.street_name }},
+                                    {{ club.main_venue.postcode }}
+                                </address>
+
+                            </div>
+                        </div>
+
+                </div>
+                {% endif %}
+                {% if user.is_authenticated %}
+                    {% if club.management %}
+                        <div class="card rounded-0 p-0 m-0 border-0 mb-3">
                             <div class="card-header border rounded-0">
                                 Contacts
                             </div>
@@ -104,28 +135,9 @@
                             </div>
                         </div>
                     {% endif %}
-                </div>
-            {% endif %}
-
-            <div class="col-sm-8 pr-0 mx-0 pt-3 pl-0 pt-sm-0 pl-sm-3">
-                {% if club.main_venue %}
-                    <div class="card rounded-0 p-0 m-0 border-0">
-                        <div class="card-header border rounded-0">
-                            Main Venue
-                        </div>
-                        <div class="card-body border border-top-0">
-
-                            <h4>{{ club.main_venue.name }}</h4>
-                            <address class="my-2">
-                                {{ club.main_venue.street_name }},
-                                {{ club.main_venue.postcode }}
-                            </address>
-
-                        </div>
-                    </div>
                 {% endif %}
-            </div>
 
+            </div>
         </div>
 
 

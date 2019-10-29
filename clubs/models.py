@@ -24,11 +24,12 @@ class Club(models.Model):
     main_contact = models.ForeignKey('Member',
                                      related_name='main_contact_for',
                                      on_delete=models.SET_NULL,
-                                     null=True)
+                                     null=True, blank=True)
     fixture_coordinator = models.ForeignKey('Member',
                                             related_name='fixture_coordinator_for',
                                             on_delete=models.SET_NULL,
-                                            null=True)
+                                            null=True, blank=True)
+    dashboard_link = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.name

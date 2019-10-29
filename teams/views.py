@@ -23,7 +23,7 @@ def detail(request, team_id):
     now = datetime.datetime.now()
 
     upcoming_fixtures = fixtures.filter(Q(date__gte=now))
-    past_fixtures = fixtures.filter(Q(date__lt=now))
+    past_fixtures = fixtures.filter(Q(date__lt=now)).order_by('-date')
 
     if team.club.secondary_colour == '#000000':
         light_or_dark = 'dark'

@@ -28,6 +28,26 @@
 {% block content %}
 
     <div class="container px-0">
+
+        {% if fixture.rearrangement_from.count > 0 %}
+            <div class="bg-danger text-white p-3 my-2">
+                <h5 class="m-0 p-0">This fixture has been cancelled and rearranged to <a class="text-black-50" href="{% url 'fixtures:detail' fixture.rearrangement_from.first.to_fixture.id %}">here</a>.</h5>
+            </div>
+        {% else %}
+            {% if is_cancelled %}
+                <div class="bg-danger text-white p-3 my-2">
+                    <h5 class="m-0 p-0">This fixture has been cancelled, no rearrangement has been organised.</h5>
+                </div>
+            {% endif %}
+        {% endif %}
+
+
+        {% if fixture.rearrangement_to.count > 0 %}
+            <div class="alert alert-warning rounded-0 mt-2" role="alert">
+                This fixture is a rearrangement of the one linked <a class="alert-link" href="{% url 'fixtures:detail' fixture.rearrangement_to.first.from_fixture.id %}">here</a>.
+            </div>
+        {% endif %}
+
         <div class="row m-0 p-0">
             <div class="col-5 fixture-banner d-flex align-items-center justify-content-end">
                 <div class="d-none d-md-block">
@@ -74,7 +94,7 @@
 
         <hr class="mb-4"/>
 
-        <div class="alert alert-warning" role="alert">
+        <div class="alert alert-warning rounded-0" role="alert">
             This page is under development, more features will be added soon.
         </div>
 
@@ -120,17 +140,37 @@
                                 </button>
                             {% endif %}
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-
-                                <a class="dropdown-item" href="{% url 'fixtures:cancel' fixture.id %}">Request
-                                    Cancellation/Postponement</a>
+                                {% if not is_cancelled %}
+                                    <a class="dropdown-item" href="{% url 'fixtures:cancel' fixture.id %}">Request
+                                        Cancellation</a>
+                                {% endif %}
+                                {% if rearrangements_allowed and fixture.rearrangement_from.count < 1 %}
+                                    <a class="dropdown-item" href="{% url 'rearrangements:request' fixture.id %}">Request Rearrangement</a>
+                                {% endif %}
                                 <a class="dropdown-item" target="_blank" href="{% static '2019_20-NEHL-ResultCard.pdf' %}">Download Match Card PDF</a>
-                                {% if fixture.match_card_submission_url %}
+                                {% if fixture.match_card_submission_url and not is_cancelled %}
                                     <a class="dropdown-item" target="_blank" href="{{ fixture.match_card_submission_url }}">Submit Match Card</a>
                                 {% else %}
                                     <a class="dropdown-item disabled" href="#">Submit Match Card</a>
                                 {% endif %}
                             </div>
                         </div>
+                        {% if can_administrate %}
+                        <div class="dropdown mb-3">
+                            <button class="btn btn-block btn-warning dropdown-toggle" type="button"
+                                    id="dropdownMenuButton"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Admin Tools
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                {% if fixture.rearrangement_from.count < 1 %}
+                                    <a class="dropdown-item" href="{% url 'rearrangements:create' fixture.id %}">Rearrange</a>
+                                {% else %}
+                                    <a class="dropdown-item disabled" href="#">Rearrange</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
 {#                        <div class="card mb-3">#}
 {#                            <div class="card-header">#}
 {#                                Umpire A#}

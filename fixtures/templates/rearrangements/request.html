@@ -1,0 +1,88 @@
+{% extends 'nehlwebsite/base.html' %}
+
+{% load static %}
+{% load crispy_forms_filters %}
+
+{% block css %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'fixtures/style.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+
+        <div class="container">
+
+            <div class="row m-0 p-0">
+                <div class="col-5 fixture-banner d-flex align-items-center justify-content-end">
+                    <div class="d-none d-md-block">
+                        <a href="{% url 'clubs:detail' fixture.team_a.club.id %}" class="no-underline"><h2
+                                class="text-right text-dark">{{ fixture.team_a.club.name }}</h2></a>
+                        <h3 class="text-right">{{ fixture.team_a.name }}</h3>
+                    </div>
+                    <div class="d-block d-md-none">
+                        <a href="{% url 'clubs:detail' fixture.team_a.club.id %}" class="no-underline"><h2
+                                class="text-right text-dark">{{ fixture.team_a.club.short_name|default_if_none:fixture.team_a.club.name }}</h2>
+                        </a>
+                        <h3 class="text-right">{{ fixture.team_a.short_name }}</h3>
+                    </div>
+                </div>
+                <div class="col-2 d-flex align-items-center justify-content-center">
+                    <div class="d-flex versus bg-dark justify-content-center">
+                        <h5 class="text-center text-white align-self-center m-0">VS</h5>
+                    </div>
+                </div>
+                <div class="col-5 d-flex align-items-center">
+                    <div class="d-none d-md-block">
+                        <a href="{% url 'clubs:detail' fixture.team_b.club.id %}" class="no-underline"><h2
+                                class="text-dark">{{ fixture.team_b.club.name }}</h2></a>
+                        <h3>{{ fixture.team_b.name }}</h3>
+                    </div>
+                    <div class="d-block d-md-none">
+                        <a href="{% url 'clubs:detail' fixture.team_b.club.id %}" class="no-underline"><h2
+                                class="text-dark">{{ fixture.team_b.club.short_name|default_if_none:fixture.team_b.club.name }}</h2>
+                        </a>
+                        <h3>{{ fixture.team_b.short_name }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <p class="small m-0 text-center">Venue: {{ fixture.venue.name }}</p>
+            </div>
+            <div class="d-flex justify-content-center">
+                <p class="small m-0 text-center">
+                    Competition: {{ fixture.competition.parent_competition|default_if_none:"" }} {{ fixture.competition.short_name }}</p>
+            </div>
+            <div class="d-flex justify-content-center mb-4">
+                <p class="small m-0 text-center">Date: {{ fixture.date }}</p>
+            </div>
+
+
+            <h1 class="display-4">Request Rearrangement</h1>
+
+            <hr />
+
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input type="submit" class="btn btn-success" value="Submit">
+            </form>
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script>
+        $( function() {
+            $( "#datepicker" ).datepicker({ dateFormat: 'dd/mm/yy' });
+        } );
+    </script>
+
+{% endblock %}

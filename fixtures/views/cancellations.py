@@ -1,11 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 
-from fixtures.models import FixtureCancellation
+from fixtures.models import FixtureCancellation, CancellationResponse
 from fixtures.forms import CancellationResponseForm
 from fixtures.utils.cancellations import can_manage_cancellation
 
+from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.core.paginator import Paginator
+from django.views.generic.edit import DeleteView
 
 
 def index(request):
@@ -61,9 +63,28 @@ def respond(request, cancellation_id):
 
         if form.is_valid():
 
-            return HttpResponseRedirect('index')
+            official = user.competitionofficial_set.first()
+
+            response = CancellationResponse(
+                response=form.cleaned_data['response'],
+                additional_comments=form.cleaned_data['additional_comments'],
+                response_by=official
+            )
+
+            response.save()
+
+            cancellation.response = response
+            cancellation.save()
+
+            return HttpResponseRedirect('cancellations:index')
 
     else:
         form = CancellationResponseForm()
 
     return render(request, 'cancellations/respond.html', {'cancellation': cancellation, 'form': form})
+
+
+class CancellationDelete(DeleteView):
+    template_name = 'cancellations/confirm_delete.html'
+    model = FixtureCancellation
+    success_url = reverse_lazy('cancellations:index')

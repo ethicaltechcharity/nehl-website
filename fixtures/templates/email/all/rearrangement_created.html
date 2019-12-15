@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fixture Rearrangement</title>
+</head>
+<body>
+<p>League administrator {{ rearrangement.creator.first_name }} {{ rearrangement.creator.last_name }} ({{ rearrangement.creator.email }}) has rearranged the following fixture.</p>
+<p>Fixture: {{ fixture.date }} - {{ fixture.team_a.club.name }} {{ fixture.team_a.name }}
+    vs {{ fixture.team_b.club.name }} {{ fixture.team_b.name }}</p>
+<p>New Date: {{ rearrangement.to_fixture.date }}</p>
+{% if rearrangement.reason %}
+    <p>The reasoning behind this decision is:</p>
+    <p>{{ rearrangement.reason }}</p>
+{% endif %}
+<p>The new fixture can be found <a href="https://northeasthockeyleague.org{% url 'fixtures:detail' rearrangement.to_fixture.id %}">here</a></p>
+</body>
+</html>

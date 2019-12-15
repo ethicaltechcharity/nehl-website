@@ -1,0 +1,5 @@
+User {{ request.who_requested.user.first_name }} {{ request.who_requested.user.last_name }} ({{ request.who_requested.user.email }}) of {{ request.who_requested.club.name }} has requested the following fixture be rearranged.
+Fixture: {{ fixture.date }} - {{ fixture.team_a.club.name }} {{ fixture.team_a.name }} vs {{ fixture.team_b.club.name }} {{ fixture.team_b.name }}
+New Date: {{ request.new_date_time }}
+Reason: {{ request.reason }}
+To view and respond to this rearrangement request click https://northeasthockeyleague.org{% url 'rearrangements:detail' request.id %}.

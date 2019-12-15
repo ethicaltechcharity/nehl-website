@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fixture Cancellation Request Submitted</title>
+</head>
+<body>
+<p>You have requested the following fixture be
+    cancelled on behalf of {{ cancellation.cancelled_by_team }} due to {{ cancellation.cancellation_reason }}.</p>
+<p>Fixture: {{ fixture.date }} - {{ fixture.team_a.club.name }} {{ fixture.team_a.name }}
+    vs {{ fixture.team_b.club.name }} {{ fixture.team_b.name }}</p>
+{% if cancellation.more_info %}
+<p>More Information: {{ cancellation.more_info }}</p>
+{% endif %}
+<p>Do not reply to this email.</p>
+
+</body>
+</html>

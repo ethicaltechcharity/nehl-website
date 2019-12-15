@@ -4,7 +4,7 @@
 
 {% block title %}
 
-    Cancellation
+    Rearrangement
 
 {% endblock %}
 
@@ -28,7 +28,7 @@
 
     <div class="container">
 
-        <h1 class="display-4 my-3">Cancellation</h1>
+        <h1 class="display-4 my-3">Rearrangement Request</h1>
 
         <hr class="mb-3" />
 
@@ -87,30 +87,22 @@
                                     Manage
                                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    {% if cancellation.response %}
+                    {% if response %}
                         <a class="dropdown-item disabled" href="#">Respond</a>
                     {% else %}
-                        <a class="dropdown-item" href="{% url 'cancellations:respond' cancellation.id %}">Respond</a>
+                        {% if can_administrate %}
+                            <a class="dropdown-item" href="{% url 'rearrangements:respond' rearrangement.id %}">Respond</a>
+                        {% endif %}
                     {% endif %}
-                    <a class="dropdown-item" href="{% url 'fixtures:detail' cancellation.fixture_id %}">
-                        Rearrange
-                    </a>
-                    <a class="dropdown-item" href="{% url 'fixtures:detail' cancellation.fixture_id %}">
-                        View fixture
-                    </a>
-                    <a class="dropdown-item" href="{% url 'cancellations:delete' cancellation.id %}">
-                        Delete Cancellation
-                    </a>
                 </div>
-
 
             </div>
 
             <div class="col-12 col-md-9">
 
-                {% if cancellation.response %}
+                {% if response %}
 
-                    {% if cancellation.response.response == "Accepted" %}
+                    {% if response.answer == "Approved" %}
                         <div class="alert alert-success" role="alert">
                             This request has been approved.
                         </div>
@@ -126,40 +118,42 @@
                         </div>
                         <div class="card-body">
                             <h6 class="mb-1">Answer</h6>
-                            <p class="mb-2">{{ cancellation.response.response }}</p>
+                            <p class="mb-2">{{ response.answer }}</p>
+                            <h6 class="mb-1">Reason</h6>
+                            <p class="mb-2">{{ response.reason }}</p>
                             <h6 class="mb-1">Response By</h6>
-                            <p class="mb-2">{{ cancellation.response.response_by.user.first_name }} {{ cancellation.response.response_by.user.last_name }}</p>
-                            <h6 class="mb-1">Additional Comments</h6>
-                            <p class="mb-1">{{ cancellation.response.additional_comments }}</p>
+                            <p class="mb-2">{{ response.responder.first_name }} {{ response.responder.last_name }}</p>
+                            <h6 class="mb-1">When</h6>
+                            <p class="mb-2">{{ response.when }}</p>
                         </div>
                     </div>
                 {% endif %}
 
                 <div class="card mb-3">
                     <div class="card-header">
-                        Cancellation Reasoning
+                        Rearrangement Information
                     </div>
                     <div class="card-body">
-                        <h6 class="mb-1">Cancelled By</h6>
-                        <p class="mb-2">{{ cancellation.cancelled_by_team }}</p>
+                        <h6 class="mb-1">Status</h6>
+                        <p class="mb-2">{{ rearrangement.status }}</p>
+                        <h6 class="mb-1">New Date</h6>
+                        <p class="mb-2">{{ rearrangement.new_date_time|date:"SHORT_DATE_FORMAT" }}</p>
                         <h6 class="mb-1">Reason</h6>
-                        <p class="mb-2">{{ cancellation.cancellation_reason }}</p>
-                        <h6 class="mb-1">More Info</h6>
-                        <p class="mb-1">{{ cancellation.more_info }}</p>
+                        <p class="mb-2">{{ rearrangement.reason }}</p>
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="card-header">
-                        Cancellation Submitter
+                        Rearrangement Requester
                     </div>
                     <div class="card-body">
                         <h6 class="mb-1">Name</h6>
-                        <p class="mb-2">{{ cancellation.cancellation_reporter.user.first_name }} {{ cancellation.cancellation_reporter.user.last_name }}</p>
+                        <p class="mb-2">{{ rearrangement.who_requested.user.first_name }} {{ rearrangement.who_requested.user.last_name }}</p>
                         <h6 class="mb-1">Club</h6>
-                        <p class="mb-2">{{ cancellation.cancellation_reporter.club.name }}</p>
+                        <p class="mb-2">{{ rearrangement.who_requested.club.name }}</p>
                         <h6 class="mb-1">When</h6>
-                        <p class="mb-1">{{ cancellation.datetime_cancelled }}</p>
+                        <p class="mb-1">{{ rearrangement.date_time_created }}</p>
                     </div>
                 </div>
             </div>

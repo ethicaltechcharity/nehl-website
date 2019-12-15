@@ -1,0 +1,6 @@
+You have requested the following fixture be cancelled on behalf of {{ cancellation.cancelled_by_team }} due to {{ cancellation.cancellation_reason }}.
+Fixture: {{ fixture.date }} - {{ fixture.team_a.club.name }} {{ fixture.team_a.name }} vs {{ fixture.team_b.club.name }} {{ fixture.team_b.name }}
+{% if cancellation.more_info %}
+More Information: {{ cancellation.more_info }}
+{% endif %}
+Do not reply to this email.

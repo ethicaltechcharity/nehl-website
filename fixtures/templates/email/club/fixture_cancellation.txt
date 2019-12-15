@@ -3,3 +3,4 @@ Fixture: {{ fixture.date }} - {{ fixture.team_a.club.name }} {{ fixture.team_a.n
 {% if cancellation.more_info %}
 More Information: {{ cancellation.more_info }}
 {% endif %}
+Do not reply to this email.

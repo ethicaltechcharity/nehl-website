@@ -1,0 +1,8 @@
+League administrator {{ rearrangement.creator.first_name }} {{ rearrangement.creator.last_name }} ({{ rearrangement.creator.email }}) has rearranged the following fixture.
+Fixture: {{ fixture.date }} - {{ fixture.team_a.club.name }} {{ fixture.team_a.name }} vs {{ fixture.team_b.club.name }} {{ fixture.team_b.name }}
+New Date: {{ rearrangement.to_fixture.date }}
+{% if rearrangement.reason %}
+    The reasoning behind this decision is:
+    {{ rearrangement.reason }}
+{% endif %}
+The new fixture can be found at https://northeasthockeyleague.org{% url 'fixtures:detail' rearrangement.to_fixture.id %}

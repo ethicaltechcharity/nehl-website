@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fixture Rearrangement Request</title>
+</head>
+<body>
+<p>You have requested the following fixture be rearranged.</p>
+<p>Fixture: {{ fixture.date }} - {{ fixture.team_a.club.name }} {{ fixture.team_a.name }}
+    vs {{ fixture.team_b.club.name }} {{ fixture.team_b.name }}</p>
+<p>New Date: {{ request.new_date_time }}</p>
+<p>Reason: {{ request.reason }}</p>
+<p>A follow up email will confirm the date of rearrangement.</p>
+<p>The fixture rearrangement request is viewable <a href="https://northeasthockeyleague.org{% url 'rearrangements:detail' request.id %}">here</a></p>
+
+
+</body>
+</html>

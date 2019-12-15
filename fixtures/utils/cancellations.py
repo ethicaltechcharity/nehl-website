@@ -7,10 +7,10 @@ from django.template.loader import render_to_string
 
 def send_cancellation_notifications(fixture: Fixture, cancellation: FixtureCancellation):
     def notify_officials(_competition: Competition):
-        msg_html = render_to_string('email/fixture_cancellation_admin.html',
+        msg_html = render_to_string('email/admin/fixture_cancellation.html',
                                     {'fixture': fixture,
                                      'cancellation': cancellation})
-        msg_plain = render_to_string('email/fixture_cancellation_admin.txt',
+        msg_plain = render_to_string('email/admin/fixture_cancellation.txt',
                                      {'fixture': fixture,
                                       'cancellation': cancellation})
 
@@ -24,37 +24,39 @@ def send_cancellation_notifications(fixture: Fixture, cancellation: FixtureCance
             )
 
     def notify_clubs(_fixture: Fixture):
-        msg_html = render_to_string('email/fixture_cancellation_club.html',
+        msg_html = render_to_string('email/club/fixture_cancellation.html',
                                     {'fixture': fixture,
                                      'cancellation': cancellation})
-        msg_plain = render_to_string('email/fixture_cancellation_club.txt',
+        msg_plain = render_to_string('email/club/fixture_cancellation.txt',
                                      {'fixture': fixture,
                                       'cancellation': cancellation})
-        team_a_officials = _fixture.team_a.club.clubmanagementposition_set.all()
-        team_b_officials = _fixture.team_b.club.clubmanagementposition_set.all()
+        team_a_officials = {_fixture.team_a.club.main_contact, _fixture.team_a.club.fixture_coordinator}
+        team_b_officials = {_fixture.team_b.club.main_contact, _fixture.team_b.club.fixture_coordinator}
 
         for official in team_a_officials:
-            send_mail(
-                'Fixture Cancellation',
-                msg_plain,
-                'notifications@northeasthockeyleague.org',
-                [official.holder.user.email],
-                html_message=msg_html,
-            )
+            if official is not None:
+                send_mail(
+                    'Fixture Cancellation',
+                    msg_plain,
+                    'notifications@northeasthockeyleague.org',
+                    [official.user.email],
+                    html_message=msg_html,
+                )
         for official in team_b_officials:
-            send_mail(
-                'Fixture Cancellation',
-                msg_plain,
-                'notifications@northeasthockeyleague.org',
-                [official.holder.user.email],
-                html_message=msg_html,
-            )
+            if official is not None:
+                send_mail(
+                    'Fixture Cancellation',
+                    msg_plain,
+                    'notifications@northeasthockeyleague.org',
+                    [official.user.email],
+                    html_message=msg_html,
+                )
 
     competition = fixture.competition
     ultimate_parent_competition = get_most_senior_parent_competition(competition)
 
     notify_officials(ultimate_parent_competition)
-    # notify_clubs(fixture)
+    notify_clubs(fixture)
 
 
 def can_manage_cancellation(cancellation: FixtureCancellation, user_id):

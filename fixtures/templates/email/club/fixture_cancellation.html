@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Fixture Cancellation Notification</title>
+    <title>Fixture Cancellation Request Notification</title>
 </head>
 <body>
 <p>User {{ cancellation.cancellation_reporter.user.first_name }} {{ cancellation.cancellation_reporter.user.last_name }}
@@ -14,6 +14,7 @@
 {% if cancellation.more_info %}
 <p>More Information: {{ cancellation.more_info }}</p>
 {% endif %}
+<p>Do not reply to this email.</p>
 
 </body>
 </html>

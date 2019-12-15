@@ -1,0 +1,7 @@
+League administrator {{ response.responder.first_name }} {{ response.responder.last_name }} ({{ response.responder.email }}) has {{ response.answer }} the request to rearrange the following fixture.
+Fixture: {{ fixture.date }} - {{ fixture.team_a.club.name }} {{ fixture.team_a.name }} vs {{ fixture.team_b.club.name }} {{ fixture.team_b.name }}
+New Date: {{ response.request.new_date_time }}
+{% if response.reason %}
+    The reasoning behind this decision is:
+    {{ response.reason }}
+{% endif %}

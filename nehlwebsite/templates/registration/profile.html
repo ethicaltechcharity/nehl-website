@@ -60,15 +60,32 @@
                     </div>
                 {% endif %}
             </div>
-{#            {% if user.member %}#}
-{#            <div class="card">#}
-{#                <div class="card-header">#}
-{#                    Competition Management#}
-{#                </div>#}
-{##}
-{##}
-{#            </div>#}
-{#            {% endif %}#}
+            {% if user.competitionofficial_set.count > 0 %}
+            <div class="card">
+                <div class="card-header">
+                    Competition Management
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <a class="disabled bg-light list-group-item">
+                            Tools
+                        </a>
+                        <a href="{% url 'cancellations:index' %}"
+                           class="list-group-item list-group-item-action">
+                            Cancellations
+                        </a>
+                        <a href="{% url 'rearrangements:index' %}"
+                           class="list-group-item list-group-item-action">
+                            Rearrangements
+                        </a>
+                        <a href="{% url 'fixtures:matchcardoriginals' %}"
+                           class="list-group-item list-group-item-action">
+                            Match Cards
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
         </div>
 {#        <div class="row mt-3">#}
 {#            <div class="col-12 col-md-6">#}

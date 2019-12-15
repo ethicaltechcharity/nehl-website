@@ -23,9 +23,18 @@ class Competition(models.Model):
                                            )
     officials = models.ManyToManyField('CompetitionOfficial', blank=True)
     rules = models.ManyToManyField('RuleSet', blank=True)
+    config = models.ManyToManyField('CompetitionConfigItem', blank=True)
 
     def __str__(self):
         return self.name
+
+
+class CompetitionConfigItem(models.Model):
+    key = models.CharField(max_length=25)
+    value = models.BooleanField()
+
+    def __str__(self):
+        return self.key + ': ' + self.value.__str__()
 
 
 class Penalty(models.Model):
@@ -35,7 +44,7 @@ class Penalty(models.Model):
         return self.description
 
     class Meta:
-        verbose_name_plural = "penalties"
+        verbose_name_plural = 'penalties'
 
 
 class Rule(models.Model):
@@ -134,8 +143,32 @@ class FixtureCancellation(models.Model):
 class CancellationResponse(models.Model):
     response = models.CharField(max_length=20)
     response_by = models.ForeignKey('fixtures.CompetitionOfficial', on_delete=models.SET_NULL, null=True)
-    additional_comments = models.CharField(max_length=1000)
+    additional_comments = models.CharField(max_length=1000, null=True, blank=True)
     time = models.DateTimeField(auto_now_add=True)
+
+
+class FixtureRearrangement(models.Model):
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    from_fixture = models.ForeignKey('fixtures.Fixture', on_delete=models.CASCADE, related_name='rearrangement_from')
+    to_fixture = models.ForeignKey('fixtures.Fixture', on_delete=models.CASCADE, related_name='rearrangement_to')
+    reason = models.CharField(max_length=150)
+
+
+class RearrangementRequest(models.Model):
+    original_fixture = models.ForeignKey('fixtures.Fixture', on_delete=models.CASCADE)
+    new_date_time = models.DateTimeField()
+    date_time_created = models.DateTimeField(auto_now_add=True)
+    reason = models.CharField(max_length=150)
+    status = models.CharField(max_length=30)
+    who_requested = models.ForeignKey('clubs.Member', on_delete=models.SET_NULL, null=True)
+
+
+class RearrangementResponse(models.Model):
+    answer = models.CharField(max_length=30)
+    reason = models.CharField(max_length=150)
+    request = models.ForeignKey('fixtures.RearrangementRequest', on_delete=models.CASCADE)
+    responder = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    when = models.DateTimeField(auto_now_add=True)
 
 
 class MatchCardImage(models.Model):
@@ -152,11 +185,14 @@ class Official(models.Model):
 
 
 class MatchOfficial(Official):
-    pass
+    associated_club = models.ForeignKey('clubs.Club', on_delete=models.SET_NULL, null=True, blank=True)
 
 
 class Umpire(MatchOfficial):
-    pass
+    identification_number = models.CharField(max_length=15, null=True)
+
+    def __str__(self):
+        return self.identification_number
 
 
 class CompetitionOfficial(Official):

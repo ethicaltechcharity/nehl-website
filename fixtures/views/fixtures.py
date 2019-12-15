@@ -1,14 +1,14 @@
 import datetime
 
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.core.paginator import Paginator
 
-
 from fixtures.forms import FixtureCancellationForm, MatchCardImageForm
 from fixtures.models import Fixture, FixtureCancellation, MatchCardImage
+from fixtures.utils.general import has_config_item
 
-from nehlwebsite.utils.auth_utils import can_manage_club
+from nehlwebsite.utils.auth_utils import can_manage_club, can_administrate_competition
 
 
 def index(request):
@@ -102,6 +102,8 @@ def match_card_originals(request):
 def detail(request, fixture_id):
     fixture = get_object_or_404(Fixture, pk=fixture_id)
     can_manage_fixture = False
+    can_administrate = False
+    rearrangements_allowed = has_config_item(fixture.competition, 'rearrangements_allowed')
     user = request.user
 
     if user.is_authenticated:
@@ -109,5 +111,17 @@ def detail(request, fixture_id):
             can_manage_fixture = True
         if can_manage_club(user.id, fixture.team_b.club.id):
             can_manage_fixture = True
+        if can_administrate_competition(user.id, fixture.competition.id):
+            can_administrate = True
 
-    return render(request, 'fixtures/detail.html', {'fixture': fixture, 'can_manage': can_manage_fixture})
+    is_cancelled = fixture.fixturecancellation_set.count() > 0
+
+    context = {
+        'fixture': fixture,
+        'can_manage': can_manage_fixture,
+        'can_administrate': can_administrate,
+        'rearrangements_allowed': rearrangements_allowed,
+        'is_cancelled': is_cancelled
+    }
+
+    return render(request, 'fixtures/detail.html', context)

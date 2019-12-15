@@ -3,8 +3,8 @@ from django.http import HttpResponseForbidden, HttpResponseBadRequest
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
-from clubs.models import Club, TransferRequest
-from clubs.forms import TransferRequestForm
+from clubs.models import Club, TransferRequest, ClubManagementPosition
+from clubs.forms import TransferRequestForm, ClubManagementFormSet, ClubManagementFormSetHelper
 
 from nehlwebsite.utils.auth_utils import can_manage_club
 
@@ -110,3 +110,9 @@ def request_transfer(request, club_id):
         return HttpResponseBadRequest()
 
     return render(request, 'clubs/members/transfer-request.html', {'form': form})
+
+
+def edit_club_contacts(request, club_id):
+    club = get_object_or_404(Club, pk=club_id)
+    formset = ClubManagementFormSet(queryset=ClubManagementPosition.objects.filter(club=club))
+    return render(request, 'clubs/contacts/edit.html', {'formset': formset, 'helper': ClubManagementFormSetHelper()})

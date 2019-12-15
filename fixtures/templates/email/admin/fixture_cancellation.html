@@ -14,6 +14,7 @@
 {% if cancellation.more_info %}
 <p>More Information: {{ cancellation.more_info }}</p>
 {% endif %}
+<p>To view and respond to this cancellation request click <a href="https://northeasthockeyleague.org{% url 'cancellations:detail' cancellation.id %}">here</a></p>
 
 </body>
 </html>

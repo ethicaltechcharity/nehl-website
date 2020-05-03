@@ -1,0 +1,73 @@
+{% extends 'nehlwebsite/base.html' %}
+
+{% load static %}
+{% load paginate %}
+
+{% block css %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'clubs/style.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+
+        <h2 class="display-4 py-4">Members</h2>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mx-n3">
+                <li class="breadcrumb-item"><a href="{% url 'clubs:manage' club_id %}">Manage</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Members</li>
+            </ol>
+        </nav>
+
+        <div class="row mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <a  data-toggle="collapse" href="#test" role="button" aria-expanded="false" aria-controls="collapseExample">Search</a>
+                </div>
+                <div class="card-body collapse" id="test">
+                    <form class="form-inline">
+                        <div class="form-group mb-2 mr-2">
+                            <label for="search" class="sr-only">Name</label>
+                            <input type="text" value="{{ search }}" class="form-control" name="search" placeholder="Name"/>
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-2">Find</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Date of Birth</th>
+                    <th scope="col">Date of Registration</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for member in members %}
+                    <tr>
+                        <td>{{ member }}</td>
+                        <td>{{ member.date_of_birth }}</td>
+                        <td>{{ member.registration_date }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="{% url 'clubs:members-detail' member.club.id member.id %}" role="button">More Info</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            {% if is_paginated %}
+                {% paginate page_obj %}
+            {% endif %}
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'nehlwebsite/base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+    Competition: {{ competition.short_name|default_if_none:competition.name }}
+
+{% endblock %}
+
+{% block css %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'fixtures/style.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+
+        <h1 class="display-4 my-3">{{ competition.name }}</h1>
+
+
+
+    </div>
+
+{% endblock %}

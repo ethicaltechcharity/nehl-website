@@ -1,11 +1,6 @@
 from django.db import models
 from django.conf import settings
 
-POSITION_TYPE_CHOICES = [
-    ('CHAIR', 'Chair'),
-    ('SECRETARY', 'Secretary')
-]
-
 
 class Club(models.Model):
     name = models.CharField(max_length=60)
@@ -38,7 +33,7 @@ class Club(models.Model):
 class ClubManagementPosition(models.Model):
     club = models.ForeignKey('Club', on_delete=models.CASCADE)
     holder = models.ForeignKey('Member', on_delete=models.CASCADE)
-    type = models.CharField(max_length=30, choices=POSITION_TYPE_CHOICES)
+    type = models.CharField(max_length=30)
 
     def __str__(self):
         return self.holder.__str__()

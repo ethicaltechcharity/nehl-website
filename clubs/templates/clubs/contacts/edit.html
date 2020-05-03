@@ -2,11 +2,12 @@
 {% extends 'nehlwebsite/base.html' %}
 
 {% load static %}
-{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
 
 {% block css %}
 
     <link rel="stylesheet" type="text/css" href="{% static 'clubs/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 
 {% endblock %}
 
@@ -17,14 +18,26 @@
             <h1 class="display-4">Edit Contacts</h1>
         </div>
 
-        <form action="" method="post">
-            {% csrf_token %}
-            {% crispy formset helper %}
-            <input type="submit" class="btn btn-success" value="Submit">
-        </form>
+        {% crispy formset helper %}
     </div>
 
 {% endblock %}
 
-
-
+{%  block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <script>
+    $('.heavyselect2widget').select2({
+      ajax: {
+        url: 'http://127.0.0.1:8000/clubs/api/17/members/',
+        data: function (params) {
+          debugger;
+          var query = {
+            search: params.term,
+            format: 'json'
+          };
+          return query;
+        }
+      }
+    });
+    </script>
+{% endblock %}

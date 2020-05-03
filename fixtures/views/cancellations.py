@@ -11,7 +11,7 @@ from django.views.generic.edit import DeleteView
 
 
 def index(request):
-    cancellations = FixtureCancellation.objects.all().order_by('-datetime_cancelled')
+    cancellations = FixtureCancellation.objects.all().order_by('-fixture__date')
     user = request.user
     can_manage = False
 

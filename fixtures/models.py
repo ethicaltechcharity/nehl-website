@@ -37,6 +37,18 @@ class CompetitionConfigItem(models.Model):
         return self.key + ': ' + self.value.__str__()
 
 
+class LeagueStanding(models.Model):
+    league = models.ForeignKey('Competition', on_delete=models.CASCADE)
+    team = models.ForeignKey('teams.Team', on_delete=models.CASCADE)
+    season = models.ForeignKey('Season', on_delete=models.CASCADE)
+    num_played = models.PositiveIntegerField()
+    num_won = models.PositiveIntegerField()
+    num_lost = models.PositiveIntegerField()
+    num_drawn = models.PositiveIntegerField()
+    goal_difference = models.IntegerField()
+    total_points = models.IntegerField()
+
+
 class Penalty(models.Model):
     description = models.CharField(max_length=400)
 
@@ -122,9 +134,49 @@ class Fixture(models.Model):
                                  on_delete=models.SET_NULL,
                                  null=True, blank=True)
     match_card_submission_url = models.CharField(max_length=300, null=True, blank=True)
+    result = models.OneToOneField('FixtureResult', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.date.__str__() + ' - ' + self.team_a.__str__() + " vs " + self.team_b.__str__()
+
+
+class FixtureResult(models.Model):
+    team_a_score = models.PositiveSmallIntegerField()
+    team_b_score = models.PositiveSmallIntegerField()
+    team_a_points = models.IntegerField()
+    team_b_points = models.IntegerField()
+    draw = models.BooleanField()
+    winner = models.ForeignKey('teams.Team', related_name='wins', on_delete=models.SET_NULL, null=True, blank=True)
+    loser = models.ForeignKey('teams.Team', related_name='losses', on_delete=models.SET_NULL, null=True, blank=True)
+
+
+class MatchEvent(models.Model):
+    time_occurred = models.DurationField(null=True, blank=True)
+    player_involved = models.ForeignKey('Player', on_delete=models.SET_NULL, null=True)
+    fixture = models.ForeignKey('FixtureResult', on_delete=models.CASCADE)
+
+
+class Goal(MatchEvent):
+    pass
+
+
+class PersonalPenalty(MatchEvent):
+    awarded_by = models.ForeignKey('Umpire', on_delete=models.SET_NULL, null=True)
+    penalty_type = models.CharField(max_length=50)
+
+
+class Player(models.Model):
+    member = models.ForeignKey('clubs.Member', on_delete=models.SET_NULL, null=True, blank=True)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+
+
+class Appearance(models.Model):
+    fixture = models.ForeignKey('Fixture', on_delete=models.CASCADE)
+    player = models.ForeignKey('Player', on_delete=models.CASCADE)
+    team = models.ForeignKey('teams.Team', on_delete=models.CASCADE)
+    designated_captain = models.BooleanField()
+    designated_substitute = models.BooleanField()
 
 
 class FixtureCancellation(models.Model):

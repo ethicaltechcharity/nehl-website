@@ -1,0 +1,60 @@
+{% extends 'nehlwebsite/base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+    Member
+
+{% endblock %}
+
+{% block css %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'clubs/style.css' %}">
+
+{% endblock %}
+{% block content %}
+
+    <div class="container">
+
+        <h1 class="display-4 my-3">Member</h1>
+
+        <hr class="mb-4"/>
+
+        <div class="row">
+
+            <div class="col-12 col-md-3 mb-3">
+                <button class="btn btn-block btn-primary dropdown-toggle" type="button"
+                                        id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Manage
+                                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                </div>
+
+            </div>
+
+            <div class="col-12 col-md-9">
+
+                <div class="card">
+                    <div class="card-header">
+                        Details
+                    </div>
+                    <div class="card-body">
+                        <h6 class="mb-1">Name</h6>
+                        <p class="mb-2">{{ member }}</p>
+                        <h6 class="mb-1">Date of Birth</h6>
+                        <p class="mb-2">{{ member.date_of_birth }}</p>
+                        <h6 class="mb-1">Date of Registration</h6>
+                        <p class="mb-1">{{ member.registration_date }}</p>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+{% endblock %}

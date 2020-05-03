@@ -18,9 +18,10 @@
                 </div>
                 <div class="card-body">
                     <ul class="list-group">
-                        <li class="list-group-item"><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</li>
-                        <li class="list-group-item"><strong>Username:</strong> {{ user.username }}</li>
-                        <li class="list-group-item"><strong>Date joined:</strong> {{ user.date_joined }}</li>
+                        <li class="list-group-item"><strong>Name: </strong>{{ user.first_name }} {{ user.last_name }}</li>
+                        <li class="list-group-item"><strong>Username: </strong>{{ user.username }}</li>
+                        <li class="list-group-item"><strong>Email: </strong>{{ user.email }}</li>
+                        <li class="list-group-item"><strong>Date joined: </strong>{{ user.date_joined }}</li>
                     </ul>
                     <a href="{% url 'logout' %}" role="button" class="btn btn-success mt-2">
                         Log Out

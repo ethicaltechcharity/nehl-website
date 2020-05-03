@@ -64,7 +64,11 @@
             </div>
             <div class="col-2 d-flex align-items-center justify-content-center">
                 <div class="d-flex versus bg-dark justify-content-center">
-                    <h5 class="text-center text-white align-self-center m-0">VS</h5>
+                    {% if fixture.result %}
+                        <h5 class="text-center text-white align-self-center m-0">{{ fixture.result.team_a_score }} - {{ fixture.result.team_b_score }}</h5>
+                    {% else %}
+                        <h5 class="text-center text-white align-self-center m-0">VS</h5>
+                    {% endif %}
                 </div>
             </div>
             <div class="col-5 d-flex align-items-center">
@@ -168,6 +172,7 @@
                                 {% else %}
                                     <a class="dropdown-item disabled" href="#">Rearrange</a>
                                 {% endif %}
+                                <a class="dropdown-item" href="{% url 'fixtures:submit-result' fixture.id %}">Set Result</a>
                             </div>
                         </div>
                         {% endif %}

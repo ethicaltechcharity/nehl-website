@@ -33,14 +33,20 @@ INSTALLED_APPS = [
     'fixtures',
     'teams',
     'nehlwebsite',
+
+    #
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+
+    #
     'crispy_forms',
     'storages',
+    'django_select2',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -76,6 +82,11 @@ TEMPLATES = [
         },
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
 
 WSGI_APPLICATION = 'nehlwebsite.wsgi.application'
 
@@ -162,6 +173,7 @@ AWS_STORAGE_BUCKET_NAME = 'nehl-web-files'
 AWS_S3_REGION_NAME = 'eu-west-2'  # e.g. us-east-2
 AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
 AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+AWS_DEFAULT_ACL = True
 
 # Tell django-storages the domain to use to refer to static files.
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME

@@ -1,6 +1,11 @@
 from django import forms
+
 from clubs.models import Club, ClubManagementPosition, Member
+from fixtures.models import Umpire
+
 from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
+from django_select2.forms import HeavySelect2Widget
 
 
 class TransferRequestForm(forms.Form):
@@ -11,36 +16,42 @@ class TransferRequestForm(forms.Form):
     evidence = forms.FileField(required=False)
 
 
+class ClubManagementPositionWidget(forms.TextInput):
+    def format_value(self, value):
+        user = Member.objects.get(pk=value).user
+        return user.first_name + ' ' + user.last_name
+
+
 class EditClubManagementForm(forms.ModelForm):
 
     class Meta:
         model = ClubManagementPosition
-        exclude = ['club']
+        exclude = []
         widgets = {
-            'type': forms.TextInput()
+            'holder': ClubManagementPositionWidget(),
+            'type': forms.TextInput(),
+            'club': forms.HiddenInput()
+        }
+        labels = {
+            'type': 'Position'
         }
 
-    def __init__(self, club, *args, **kwargs):
-        super(EditClubManagementForm, self).__init__(*args, **kwargs)
-        self.fields['holder'].queryset = Member.objects.filter(club=club).all()
-
-
-class BaseClubManagementFormSet(forms.BaseModelFormSet):
-
-    class Meta:
-        model = ClubManagementPosition
-
-    def __init__(self, club, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.queryset = ClubManagementPosition.objects.filter(club=club).all()
+        instance = getattr(self, 'instance', None)
+        if instance and instance.pk:
+            self.fields['holder'].disabled = True
+        else:
+            self.fields['holder'].widget = HeavySelect2Widget(
+                data_url='/clubs/api/17/members/'
+            )
 
 
 ClubManagementFormSet = forms.modelformset_factory(
     ClubManagementPosition,
+    form=EditClubManagementForm,
     exclude=('club', ),
-    widgets={
-        'holder': forms.TextInput(),
-        'type': forms.TextInput()}
+    can_delete=True
 )
 
 
@@ -48,3 +59,24 @@ class ClubManagementFormSetHelper(FormHelper):
     def __init__(self, *args, **kwargs):
         super(ClubManagementFormSetHelper, self).__init__(*args, **kwargs)
         self.template = 'bootstrap/table_inline_formset.html'
+        self.add_input(Submit('submit', 'Save Changes'))
+
+
+UmpireFormSet = forms.modelformset_factory(
+    Umpire,
+    exclude=(),
+)
+
+
+class UmpireFormSetHelper(FormHelper):
+    def __init__(self, *args, **kwargs):
+        super(UmpireFormSetHelper, self).__init__(*args, **kwargs)
+        self.template = 'bootstrap/table_inline_formset.html'
+        self.add_input(Submit('submit', 'Save Changes'))
+
+
+class MemberRegistrationForm(forms.Form):
+    first_name = forms.CharField(max_length=50)
+    last_name = forms.CharField(max_length=50)
+    date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+

@@ -9722,6 +9722,10 @@ textarea {
   column-count: 1 !important;
 }
 
+.hidden {
+  display: none;
+}
+
 body {
   padding-top: 82px;
 }

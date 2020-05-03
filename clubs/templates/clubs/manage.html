@@ -23,12 +23,22 @@
         </div>
 
         <div class="row">
-            <div class="col col-sm-6">
+            <div class="col-12 col-sm-6 mb-3">
                 <div class="card">
                     <div class="card-header">Common Functions</div>
                     <div class="card-body">
-                        <a class="btn btn-primary" href="{% url 'clubs:request-transfer' club.id %}" role="button">Request Player Transfer</a>
-{#                        <a class="btn btn-primary mt-2" href="{% url 'clubs:edit-contacts' club.id %}" role="button">Edit Club Contacts</a>#}
+                        <a class="btn btn-primary m-1" href="{% url 'clubs:request-transfer' club.id %}" role="button">Request Player Transfer</a>
+                        <a class="btn btn-primary m-1" href="{% url 'clubs:edit-contacts' club.id %}" role="button">Edit Club Contacts</a>
+{#                        <a class="btn btn-primary m-1" href="{% url 'clubs:edit-umpires' club.id %}" role="button">Edit Club Umpires</a>#}
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6">
+                <div class="card">
+                    <div class="card-header">Club Membership</div>
+                    <div class="card-body">
+                        <p class="mb-2">Your club has {{ membership_size }} registered members.</p>
+                        <a class="btn btn-primary mt-2" href="{% url 'clubs:members-list' club.id %}" role="button">Browse Members</a>
                     </div>
                 </div>
             </div>

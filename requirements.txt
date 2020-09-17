@@ -7,7 +7,7 @@ cement==2.8.2
 certifi==2019.6.16
 chardet==3.0.4
 colorama==0.3.9
-Django==3.0.3
+Django==3.0.7
 django-appconf==1.0.3
 django-crispy-forms==1.8.1
 django-dynamic-formsets==0.0.8

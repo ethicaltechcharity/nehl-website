@@ -1,0 +1,36 @@
+{% extends 'nehlwebsite/base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+    Competition: {{ competition.short_name|default_if_none:competition.name }}
+
+{% endblock %}
+
+{% block css %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'fixtures/style.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+
+        <div class="jumbotron">
+            <h3>{{ competition.name }} Admin</h3>
+        </div>
+
+        <div class="row">
+            <div class="col">
+
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+{% endblock %}

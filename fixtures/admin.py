@@ -5,4 +5,5 @@ from fixtures.models import *
 
 admin.site.register([Season, Competition, Fixture, Venue, Umpire,
                      CompetitionOfficial, CompetitionConfigItem, Rule, RuleSet, RuleParagraph, Penalty,
-                     FixtureCancellation, FixtureRearrangement])
+                     FixtureCancellation, FixtureRearrangement, FixtureResult, Appearance, Player, PersonalPenaltyType,
+                     PersonalPenalty])

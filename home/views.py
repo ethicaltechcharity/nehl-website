@@ -14,6 +14,10 @@ def rules(request):
     return render(request, 'home/rules.html', {"competition": nehl})
 
 
+def help(request):
+    return render(request, 'home/help.html')
+
+
 def contact(request):
 
     if request.method == 'POST':

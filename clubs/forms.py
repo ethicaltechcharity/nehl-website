@@ -5,7 +5,7 @@ from fixtures.models import Umpire
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
-from django_select2.forms import HeavySelect2Widget
+from django_select2.forms import HeavySelect2Widget, ModelSelect2Widget
 
 
 class TransferRequestForm(forms.Form):
@@ -80,3 +80,8 @@ class MemberRegistrationForm(forms.Form):
     last_name = forms.CharField(max_length=50)
     date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
 
+
+class AdminMemberTransferForm(forms.Form):
+    member = forms.ModelChoiceField(queryset=Member.objects.all(),
+                                    widget=HeavySelect2Widget(data_url='/clubs/api/members/'))
+    new_club = forms.ModelChoiceField(queryset=Club.objects.all())

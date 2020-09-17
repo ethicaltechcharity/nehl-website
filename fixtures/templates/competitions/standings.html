@@ -1,0 +1,54 @@
+{% extends 'nehlwebsite/base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+    {{ competition.parent_competition.short_name }} {{ competition.short_name|default_if_none:competition.name }}
+
+{% endblock %}
+
+{% block css %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'fixtures/style.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+
+         <h4 class="my-3">{{ competition.parent_competition.short_name }} {{ competition.name }} Standings</h4>
+
+        <p class="lead">Season {{ season.display_name }}</p>
+
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Team</th>
+                    <th scope="col">Pld</th>
+                    <th scope="col">Won</th>
+                    <th scope="col">Drawn</th>
+                    <th scope="col">Lost</th>
+                    <th scope="col">Pts</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for standing in standings %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><a href="{% url 'teams:detail' standing.team_id %}">{{ standing.team.club.short_name }} {{ standing.team.short_name }}</a></td>
+                    <td>{{ standing.num_played }}</td>
+                    <td>{{ standing.num_won }}</td>
+                    <td>{{ standing.num_drawn }}</td>
+                    <td>{{ standing.num_lost }}</td>
+                    <td>{{ standing.total_points }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'nehlwebsite/base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+    Competitions
+
+{% endblock %}
+
+{% block css %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'fixtures/style.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+
+        <h1 class="my-3">Competitions</h1>
+
+        <div class="row">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for competition in competitions %}
+                    <tr>
+                        <td>{{ competition.name }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="{% url 'competitions:detail' competition.id %}" role="button">More Info</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+{% endblock %}

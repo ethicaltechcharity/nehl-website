@@ -16,12 +16,94 @@
 
 {% block content %}
 
-    <div class="container">
+    <div class="container p-0 p-sm-1">
 
         <h1 class="display-4 my-3">{{ competition.name }}</h1>
 
+        {% if user.competitionofficial_set.count > 0 %}
+            {% if competition.current_season %}
+                <div class="mb-1">
+                    <a href="{% url 'competitions:season-issues' competition.id competition.current_season.id %}" role="button" class="btn-sm btn-success">Issues</a>
+                </div>
+            {% endif %}
+        {% endif %}
+
+        {% if competition.parent_competition %}
+            <p class="ml-1 text-black-50">Parent Competition: <a href="{% url 'competitions:detail' competition.parent_competition.id %}">{{ competition.parent_competition.name }}</a></p>
+        {% endif %}
+
+        {% if seasons.count > 0 %}
+            <div class="card">
+                <div class="card-header">
+                    Current Season Standings
+                </div>
+                <div class="card-body py-0 pb-1 px-0">
+                    <table class="table table-sm mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Team</th>
+                                <th scope="col">Pld</th>
+                                <th scope="col">Won</th>
+                                <th scope="col">Drawn</th>
+                                <th scope="col">Lost</th>
+                                <th scope="col">Pts</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for standing in standings.all %}
+                            <tr>
+                                <td class="text-center align-middle">{{ forloop.counter }}</td>
+                                <td class="align-middle"><a href="{% url 'teams:detail' standing.team_id %}">{{ standing.team.club.short_name }} {{ standing.team.short_name }}</a></td>
+                                <td class="align-middle">{{ standing.num_played }}</td>
+                                <td class="align-middle">{{ standing.num_won }}</td>
+                                <td class="align-middle">{{ standing.num_drawn }}</td>
+                                <td class="align-middle">{{ standing.num_lost }}</td>
+                                <td class="align-middle">{{ standing.total_points }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if competition.child_competition.count > 0 %}
+            <div class="card mt-3">
+                <div class="card-header">
+                    Child Competitions
+                </div>
+                <div class="card-body my-n1 py-0 px-0 pb-1">
+                    <div class="list-group rounded-0">
+                        {% for child in competition.child_competition.all %}
+                            <a href="{% url 'competitions:detail' child.id %}"
+                               class="rounded-0 list-group-item list-group-item-action border-left-0 border-right-0">
+                                {{ child.name }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
 
 
+        {% if seasons.count != 0 %}
+            <div class="card mt-3">
+                <div class="card-header">
+                    Seasons
+                </div>
+                <div class="card-body px-0 pb-1">
+                    <div class="list-group rounded-0">
+                        {% for season in seasons %}
+                            <a href="{% url 'competitions:standings' competition.id season.id %}"
+                               class="rounded-0 list-group-item list-group-item-action border-left-0 border-right-0">
+                                {{ season.display_name }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     </div>
 
 {% endblock %}

@@ -7,9 +7,11 @@ from fixtures.utils.general import get_file_path
 class Season(models.Model):
     years = models.CharField(max_length=6)
     display_name = models.CharField(max_length=7)
+    teams = models.ManyToManyField('teams.Team')
+    competition = models.ForeignKey('fixtures.Competition', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.display_name
+        return self.display_name + ' - ' + self.competition.__str__()
 
 
 class Competition(models.Model):
@@ -24,6 +26,10 @@ class Competition(models.Model):
     officials = models.ManyToManyField('CompetitionOfficial', blank=True)
     rules = models.ManyToManyField('RuleSet', blank=True)
     config = models.ManyToManyField('CompetitionConfigItem', blank=True)
+    current_season = models.OneToOneField('Season',
+                                          on_delete=models.SET_NULL,
+                                          related_name='competition_current',
+                                          null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -41,12 +47,12 @@ class LeagueStanding(models.Model):
     league = models.ForeignKey('Competition', on_delete=models.CASCADE)
     team = models.ForeignKey('teams.Team', on_delete=models.CASCADE)
     season = models.ForeignKey('Season', on_delete=models.CASCADE)
-    num_played = models.PositiveIntegerField()
-    num_won = models.PositiveIntegerField()
-    num_lost = models.PositiveIntegerField()
-    num_drawn = models.PositiveIntegerField()
-    goal_difference = models.IntegerField()
-    total_points = models.IntegerField()
+    num_played = models.PositiveIntegerField(default=0)
+    num_won = models.PositiveIntegerField(default=0)
+    num_lost = models.PositiveIntegerField(default=0)
+    num_drawn = models.PositiveIntegerField(default=0)
+    goal_difference = models.IntegerField(default=0)
+    total_points = models.IntegerField(default=0)
 
 
 class Penalty(models.Model):
@@ -135,24 +141,61 @@ class Fixture(models.Model):
                                  null=True, blank=True)
     match_card_submission_url = models.CharField(max_length=300, null=True, blank=True)
     result = models.OneToOneField('FixtureResult', on_delete=models.CASCADE, null=True, blank=True)
+    metadata = models.OneToOneField('FixtureMetadata', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.date.__str__() + ' - ' + self.team_a.__str__() + " vs " + self.team_b.__str__()
 
 
 class FixtureResult(models.Model):
-    team_a_score = models.PositiveSmallIntegerField()
-    team_b_score = models.PositiveSmallIntegerField()
-    team_a_points = models.IntegerField()
-    team_b_points = models.IntegerField()
-    draw = models.BooleanField()
+    team_a_score = models.PositiveSmallIntegerField(default=0)
+    team_b_score = models.PositiveSmallIntegerField(default=0)
+    team_a_points = models.IntegerField(default=0)
+    team_b_points = models.IntegerField(default=0)
+    draw = models.BooleanField(default=False)
     winner = models.ForeignKey('teams.Team', related_name='wins', on_delete=models.SET_NULL, null=True, blank=True)
     loser = models.ForeignKey('teams.Team', related_name='losses', on_delete=models.SET_NULL, null=True, blank=True)
+    complete = models.BooleanField(default=False)
+
+    def __str__(self):
+        if self.draw:
+            return '{team_a} - {team_b} draw'.format(team_a=self.fixture.team_a, team_b=self.fixture.team_b)
+        else:
+            return '{winner} beat {loser}'.format(winner=self.winner, loser=self.loser)
+
+
+def get_file_path(instance, filename):
+    import uuid
+    import os
+
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (uuid.uuid4(), ext)
+    return os.path.join('uploads/match_cards', filename)
+
+
+class FixtureMetadata(models.Model):
+    match_card_image = models.ImageField(upload_to=get_file_path, null=True)
+    match_card_image_submitted = models.BooleanField(default=False)
+    squad_a_selected = models.BooleanField(default=False)
+    squad_b_selected = models.BooleanField(default=False)
+    scorers_submitted = models.BooleanField(default=False)
+    personal_penalties_submitted = models.BooleanField(default=False)
+    start_time_submitted = models.BooleanField(default=False)
+
+    time_match_card_image_submitted = models.DateTimeField(null=True)
+    time_squad_a_selected = models.DateTimeField(null=True)
+    time_squad_b_selected = models.DateTimeField(null=True)
+    time_scorers_submitted = models.DateTimeField(null=True)
+    time_penalties_submitted = models.DateTimeField(null=True)
+    time_match_card_complete = models.DateTimeField(null=True)
+    time_start_time_submitted = models.DateTimeField(null=True)
+
+    issue_detected = models.BooleanField(default=False)
 
 
 class MatchEvent(models.Model):
     time_occurred = models.DurationField(null=True, blank=True)
-    player_involved = models.ForeignKey('Player', on_delete=models.SET_NULL, null=True)
+    appearance = models.ForeignKey('Appearance', on_delete=models.SET_NULL, null=True)
     fixture = models.ForeignKey('FixtureResult', on_delete=models.CASCADE)
 
 
@@ -162,7 +205,17 @@ class Goal(MatchEvent):
 
 class PersonalPenalty(MatchEvent):
     awarded_by = models.ForeignKey('Umpire', on_delete=models.SET_NULL, null=True)
-    penalty_type = models.CharField(max_length=50)
+    penalty_type = models.ForeignKey('PersonalPenaltyType', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'Personal penalties'
+
+
+class PersonalPenaltyType(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
 
 
 class Player(models.Model):
@@ -170,13 +223,20 @@ class Player(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
 
+    def __str__(self):
+        if self.member is None:
+            return self.first_name + ' ' + self.last_name
+        else:
+            return self.member.__str__()
+
 
 class Appearance(models.Model):
     fixture = models.ForeignKey('Fixture', on_delete=models.CASCADE)
     player = models.ForeignKey('Player', on_delete=models.CASCADE)
     team = models.ForeignKey('teams.Team', on_delete=models.CASCADE)
-    designated_captain = models.BooleanField()
-    designated_substitute = models.BooleanField()
+
+    def __str__(self):
+        return self.team.__str__() + ': ' + self.player.__str__()
 
 
 class FixtureCancellation(models.Model):

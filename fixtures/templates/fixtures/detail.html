@@ -90,7 +90,7 @@
         </div>
         <div class="d-flex justify-content-center">
             <p class="small m-0 text-center">
-                Competition: {{ fixture.competition.parent_competition|default_if_none:"" }} {{ fixture.competition.short_name }}</p>
+                Competition: <a href="{% url 'competitions:detail' fixture.competition.id %}">{{ fixture.competition.parent_competition|default_if_none:"" }} {{ fixture.competition.short_name }}</a></p>
         </div>
         <div class="d-flex justify-content-center mb-4">
             <p class="small m-0 text-center">Date: {{ fixture.date }}</p>
@@ -98,12 +98,33 @@
 
         <hr class="mb-4"/>
 
-        <div class="alert alert-warning rounded-0" role="alert">
-            This page is under development, more features will be added soon.
-        </div>
-
         <div class="row">
             <div class="col-12 col-md-8 mb-3">
+                {% if fixture.metadata.squad_a_selected or fixture.metadata.squad_b_selected %}
+                <div class="card">
+                    <div class="card-header">
+                        Lineups
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">{{ fixture.team_a.club.name }} {{ fixture.team_a.name }}</th>
+                                    <th scope="col">{{ fixture.team_b.club.name }} {{ fixture.team_b.name }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for appearance_team_a, appearance_team_b in squads %}
+                                <tr>
+                                    <td>{{ appearance_team_a.player }}</td>
+                                    <td>{{ appearance_team_b.player }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
                 {% if fixture.venue %}
                     <div class="card">
                         <div class="card-header">
@@ -152,10 +173,42 @@
                                     <a class="dropdown-item" href="{% url 'rearrangements:request' fixture.id %}">Request Rearrangement</a>
                                 {% endif %}
                                 <a class="dropdown-item" target="_blank" href="{% static '2019_20-NEHL-ResultCard.pdf' %}">Download Match Card PDF</a>
-                                {% if fixture.match_card_submission_url and not is_cancelled %}
-                                    <a class="dropdown-item" target="_blank" href="{{ fixture.match_card_submission_url }}">Submit Match Card</a>
-                                {% else %}
-                                    <a class="dropdown-item disabled" href="#">Submit Match Card</a>
+{#                                {% if fixture.match_card_submission_url and not is_cancelled %}#}
+{#                                    <a class="dropdown-item" target="_blank" href="{{ fixture.match_card_submission_url }}">Submit Match Card</a>#}
+{#                                {% else %}#}
+{#                                    <a class="dropdown-item disabled" href="#">Submit Match Card</a>#}
+{#                                {% endif %}#}
+                                {% if not is_cancelled %}
+                                    {% if fixture.team_a.club == fixture.team_b.club %}
+                                        {% if can_select_squad_a %}
+                                            <a class="dropdown-item" href="{% url 'fixtures:select-squad' fixture.id fixture.team_a.id %}">Select {{ fixture.team_a.name }} Squad</a>
+                                        {% endif %}
+                                        {% if can_select_squad_b %}
+                                            <a class="dropdown-item" href="{% url 'fixtures:select-squad' fixture.id fixture.team_b.id %}">Select {{ fixture.team_b.name }} Squad</a>
+                                        {% endif %}
+                                    {% else %}
+                                        {% if can_select_squad_a %}
+                                            <a class="dropdown-item" href="{% url 'fixtures:select-squad' fixture.id fixture.team_a.id %}">Select {{ fixture.team_a.club.short_name }} Squad</a>
+                                        {% endif %}
+                                        {% if can_select_squad_b %}
+                                            <a class="dropdown-item" href="{% url 'fixtures:select-squad' fixture.id fixture.team_b.id %}">Select {{ fixture.team_b.club.short_name }} Squad</a>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if can_complete_card %}
+                                        <a class="dropdown-item" href="{% url 'fixtures:submit-penalties' fixture.id %}">Complete Match Card</a>
+                                    {% elif not squads_selected and has_occurred %}
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="right" title="Select squads first">
+                                            <a class="dropdown-item disabled" href="#" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">Complete Match Card</a>
+                                        </span>
+                                    {% elif not has_occurred %}
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="right" title="Match has not yet happened">
+                                            <a class="dropdown-item disabled" href="#" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">Complete Match Card</a>
+                                        </span>
+                                    {% elif card_complete %}
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="right" title="Card already completed">
+                                            <a class="dropdown-item disabled" href="#" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">Complete Match Card</a>
+                                        </span>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         </div>
@@ -173,6 +226,9 @@
                                     <a class="dropdown-item disabled" href="#">Rearrange</a>
                                 {% endif %}
                                 <a class="dropdown-item" href="{% url 'fixtures:submit-result' fixture.id %}">Set Result</a>
+                                {% if card_complete %}
+                                    <a class="dropdown-item" href="{{ fixture.metadata.match_card_image.url }}">View Match Card Image</a>
+                                {% endif %}
                             </div>
                         </div>
                         {% endif %}

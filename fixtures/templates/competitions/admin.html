@@ -1,0 +1,54 @@
+{% extends 'nehlwebsite/base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+    Competition: {{ competition.short_name|default_if_none:competition.name }}
+
+{% endblock %}
+
+{% block css %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'fixtures/style.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+
+        <div class="jumbotron">
+            <h3>{{ competition.name }} Admin</h3>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        Seasons
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for season in competition.season_set.all %}
+                            <a href="{% url 'competitions:standings' competition.id season.id %}"
+                               class="list-group-item list-group-item-action">
+                                {{ season.display_name }}
+                            </a>
+                        {% endfor %}
+                    </ul>
+                    <div class="card-footer p-2">
+                        <a class="btn btn-primary btn-sm float-right"
+                           href="{% url 'competitions:season-create' competition.id %}" role="button">
+                            Create New Season
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+{% endblock %}

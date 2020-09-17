@@ -135,7 +135,7 @@
                                                     - {{ fixture.team_a.name }}</a></p>
                                             {% endif %}
                                             <p class="col-4 col-sm-3 col-md-2 col-xl-2 m-0 px-2">{{ fixture.date|date:"SHORT_DATE_FORMAT" }} {{ fixture.time|default_if_none:"" }}</p>
-                                            <p class="d-none d-sm-block col col-3 col-md-2 m-0 px-2">{{ fixture.competition.parent_competition.short_name }} {{ fixture.competition.short_name }}</p>
+                                            <p class="d-none d-sm-block col col-3 col-md-2 m-0 px-2"><a href="{% url 'competitions:detail' fixture.competition.id %}">{{ fixture.competition.parent_competition.short_name }} {{ fixture.competition.short_name }}</a></p>
                                             {% if fixture.venue %}
                                                 <p class="d-none d-md-block col col-3 m-0 px-2">{{ fixture.venue.name }}</p>
                                             {% else %}
@@ -148,7 +148,6 @@
                                             <p class="col-3 col-sm-2 m-0 px-2"><a role="button"
                                                                                   class="btn btn-sm btn-success"
                                                                                   href="{% url 'fixtures:detail' fixture.id %}">View</a>
-                                            </p>
                                             </p>
                                         </div>
                                     </div>

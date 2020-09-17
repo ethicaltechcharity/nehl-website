@@ -83,10 +83,12 @@
                     </div>
                     <div class="list-group rounded-0">
                         {% for team in club.team_set.all %}
-                            <a href="{% url 'teams:detail' team.id %}"
-                               class="rounded-0 list-group-item list-group-item-action">
-                                {{ team.name }}
-                            </a>
+                            {% if team.season_set.count > 0 %}
+                                <a href="{% url 'teams:detail' team.id %}"
+                                   class="rounded-0 list-group-item list-group-item-action">
+                                    {{ team.name }}
+                                </a>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>

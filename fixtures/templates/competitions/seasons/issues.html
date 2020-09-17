@@ -1,0 +1,81 @@
+{% extends 'nehlwebsite/base.html' %}
+
+{% load static %}
+{% load paginate %}
+
+{% block title %}
+
+    Competition: {{ competition.short_name|default_if_none:competition.name }}
+
+{% endblock %}
+
+{% block css %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'fixtures/style.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+
+        <div class="jumbotron">
+            <h3>{{ competition.name }} Issues</h3>
+        </div>
+
+        {% paginate issues %}
+
+        <table class="table table-responsive">
+            <thead>
+            <tr>
+                <th scope="col">Fixture</th>
+                <th scope="col">Squad A selected</th>
+                <th scope="col">Squad B selected</th>
+                <th scope="col">Scorers</th>
+                <th scope="col">Penalties</th>
+                <th scope="col">Image</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for fixture in fixtures %}
+                <tr>
+                    <td class="col">{{ fixture }}</td>
+                    {% if fixture.metadata.squad_a_selected %}
+                        <td>{{ fixture.metadata.time_squad_a_selected|date:'d/m/y H:i' }}</td>
+                    {% else %}
+                        <td>Not submitted</td>
+                    {% endif %}
+                    {% if fixture.metadata.squad_b_selected %}
+                        <td>{{ fixture.metadata.time_squad_b_selected|date:'d/m/y H:i' }}</td>
+                    {% else %}
+                        <td>Not submitted</td>
+                    {% endif %}
+                    {% if fixture.metadata.scorers_submitted %}
+                        <td>{{ fixture.metadata.time_scorers_submitted|date:'d/m/y H:i' }}</td>
+                    {% else %}
+                        <td>Not submitted</td>
+                    {% endif %}
+                    {% if fixture.metadata.personal_penalties_submitted %}
+                        <td>{{ fixture.metadata.time_penalties_submitted|date:'d/m/y H:i' }}</td>
+                    {% else %}
+                        <td>Not submitted</td>
+                    {% endif %}
+                    {% if fixture.metadata.match_card_image_submitted %}
+                        <td>{{ fixture.metadata.time_match_card_image_submitted|date:'d/m/y H:i' }}</td>
+                    {% else %}
+                        <td>Not submitted</td>
+                    {% endif %}
+                    <td>
+                        <a role="button" class="btn btn-sm btn-success" href="{% url 'fixtures:detail' fixture.id %}">Detail</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% paginate issues %}
+
+    </div>
+
+{% endblock %}

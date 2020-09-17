@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
-          integrity="pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=">
+          integrity="pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=" samesite="None">
     {#    <link rel="stylesheet" type="text/css" href="{% static 'nehlwebsite/style.css' %}">#}
     {% block css %}
 
@@ -37,9 +37,11 @@
             <div class="navbar-collapse collapse" id="navbarNavAltMarkup">
                 <ul class="nav navbar-nav ml-auto">
                     <li class="nav-item"><a class="nav-link text-white" href="{% url 'index' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{% url 'competitions:detail' 1 %}">Competitions</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="{% url 'clubs:index' %}">Clubs</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="{% url 'rules' %}">Rules</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="{% url 'contact' %}">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{% url 'help' %}">Help</a></li>
                     {% if user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link text-white" href="{% url 'profile' %}">My Profile</a></li>
                     {% else %}

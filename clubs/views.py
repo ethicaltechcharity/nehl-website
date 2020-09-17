@@ -1,19 +1,21 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.postgres.search import SearchVector
+from django.db.models import Value
+from django.db.models.functions import Concat
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseForbidden, HttpResponseBadRequest
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, FormView
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin
 
 from clubs.models import Club, Member, TransferRequest, ClubManagementPosition
 from clubs.forms import TransferRequestForm, ClubManagementFormSet, \
-    ClubManagementFormSetHelper
-from clubs.serializers import MemberSerializer
+    ClubManagementFormSetHelper, AdminMemberTransferForm
+from clubs.serializers import MemberSerializer, MemberPlusDOBSerializer
 
 from nehlwebsite.utils.auth_utils import can_manage_club
 
@@ -197,7 +199,7 @@ class MemberList(LoginRequiredMixin, ListView):
             if self.request.GET['search'] != '':
                 search_term = self.request.GET.get('search', '')
                 queryset = queryset.annotate(
-                    search=SearchVector('user__first_name', 'user__last_name')
+                    search=Concat('user__first_name', Value(' '), 'user__last_name')
                 ).filter(
                     search__icontains=search_term
                 )
@@ -217,8 +219,8 @@ class MemberList(LoginRequiredMixin, ListView):
         return super(MemberList, self).dispatch(request, *args, **kwargs)
 
 
-class MemberListAPI(ListModelMixin,
-                    GenericAPIView):
+class ClubMemberListAPI(ListModelMixin,
+                        GenericAPIView):
     model = Member
     serializer_class = MemberSerializer
 
@@ -233,9 +235,30 @@ class MemberListAPI(ListModelMixin,
             if self.request.GET['search'] != '':
                 search_term = self.request.GET.get('search', '')
                 queryset = queryset.annotate(
-                    search=SearchVector('user__first_name', 'user__last_name')
+                    search=Concat('user__first_name', Value(' '), 'user__last_name')
                 ).filter(
                     search__icontains=search_term
+                )
+        return queryset
+
+
+class MemberListAPI(ListModelMixin, GenericAPIView):
+    model = Member
+    serializer_class = MemberPlusDOBSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def get_queryset(self):
+        queryset = Member.objects.all()
+        if 'search' in self.request.GET:
+            if self.request.GET['search'] != '':
+                search_term = self.request.GET.get('search', '')
+                queryset = queryset.annotate(
+                    # search=SearchVector('user__first_name', 'user__last_name'),
+                    full_name=Concat('user__first_name', Value(' '), 'user__last_name'),
+                ).filter(
+                    full_name__icontains=search_term
                 )
         return queryset
 
@@ -252,6 +275,19 @@ class MemberDetail(LoginRequiredMixin, DetailView):
             return HttpResponseForbidden()
 
         return super(MemberDetail, self).dispatch(request, *args, **kwargs)
+
+
+class AdminMemberTransfer(LoginRequiredMixin, FormView):
+    form_class = AdminMemberTransferForm
+    template_name = 'clubs/members/admin-transfer.html'
+    success_url = '/accounts/profile'
+
+    def form_valid(self, form):
+        member = form.cleaned_data['member']
+        new_club = form.cleaned_data['new_club']
+        member.club = new_club
+        member.save()
+        return super().form_valid(form)
 
 
 # class MemberRegister(LoginRequiredMixin, FormView):

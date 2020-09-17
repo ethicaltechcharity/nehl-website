@@ -1,4 +1,3 @@
-
 {% extends 'nehlwebsite/base.html' %}
 
 {% load static %}
@@ -8,17 +7,23 @@
 {% block css %}
 
     <link rel="stylesheet" type="text/css" href="{% static 'fixtures/style.css' %}">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet"/>
     <style>
-    .select2-selection__rendered {
-        line-height: 33px !important;
-    }
-    .select2-container .select2-selection--single {
-        height: 38px !important;
-    }
-    .select2-selection__arrow {
-        height: 38px !important;
-    }
+        .select2-selection__rendered {
+            line-height: 33px !important;
+        }
+
+        .select2-container .select2-selection--single {
+            height: 38px !important;
+        }
+
+        .select2-selection__arrow {
+            height: 38px !important;
+        }
+
+        .add-row {
+            padding-left: 18px;
+        }
     </style>
 
 {% endblock %}
@@ -28,41 +33,138 @@
     <div class="container">
 
         <div class="jumbotron">
-            <h1 class="display-4">Select Squad</h1>
+            <h3>Select Squad</h3>
         </div>
 
-        {% for form in formset %}
+        <dl>
+            <dt>Fixture:</dt>
+            <dd>{{ fixture }}</dd>
+            <dt>Team:</dt>
+            <dd>{{ team }}</dd>
+        </dl>
 
-            <div class="btn-group-toggle" data-toggle="buttons">
-                <label for="{{ form.is_registered.html_name }}" id="{{ form.is_registered.id_for_label }}"
-                       class="btn btn-sm btn-secondary active">
-                    <input type="checkbox" name="{{ form.is_registered.html_name }}" checked> {{ form.is_registered.label }}
-                </label>
+        <form method="post">
+
+            {{ formset.management_form }}
+
+            {% csrf_token %}
+
+            <div id="formset">
+
+                {% for form in formset %}
+
+                    <div class="card my-1 member on-field-players">
+
+                        <div class="card-body py-1">
+                            {% for error in form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                            <div class="row align-items-center">
+
+                                <div class="col-2 col-sm-1 px-0 pl-2 px-sm-3">
+                                    {{ forloop.counter }}
+                                </div>
+
+                                <div class="col-9 col-sm-3 p-2">
+                                    <div class="btn-group-toggle" data-toggle="buttons">
+                                        <label onclick="toggle_registered(this)"
+                                               for="{{ form.is_registered.html_name }}"
+                                               id="{{ form.is_registered.id_for_label }}"
+                                               class="btn btn-sm btn-secondary {% if form.is_registered.value %}active{% endif %}">
+                                            <input type="checkbox" name="{{ form.is_registered.html_name }}"
+                                                   checked> {{ form.is_registered.label }}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-8 p-2"
+                                     style="{% if not form.is_registered.value %}display: none;{% endif %}">
+                                    {{ form.member|as_crispy_field }}
+                                </div>
+
+                                <div class="col-12 col-sm-4 pl-2 pr-0 py-2"
+                                     style="{% if form.is_registered.value %}display: none;{% endif %}">
+                                    {{ form.first_name|as_crispy_field }}
+                                </div>
+
+                                <div class="col-12 col-sm-4 pl-2 pl-sm-0 pr-2 py-2"
+                                     style="{% if form.is_registered.value %}display: none;{% endif %}">
+                                    {{ form.last_name|as_crispy_field }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+                {% with formset.empty_form as form %}
+                    <div class="card my-1 member substitutes" id="id_empty_form" style="display:none;">
+
+                        <div class="card-body py-1">
+                            <div class="row align-items-center">
+
+                                <div id="counter" class="col-2 col-sm-1 px-0 pl-2 pr-0">
+                                    <p>Sub</p>
+                                </div>
+
+                                <div class="col-9 col-sm-3 p-2">
+                                    <div class="btn-group-toggle" data-toggle="buttons">
+                                        <label onclick="toggle_registered(this)"
+                                               for="{{ form.is_registered.html_name }}"
+                                               id="{{ form.is_registered.id_for_label }}"
+                                               class="btn btn-sm btn-secondary active">
+                                            <input type="checkbox" name="{{ form.is_registered.html_name }}"
+                                                   checked> {{ form.is_registered.label }}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-8 p-2">
+                                    {{ form.member|as_crispy_field }}
+                                </div>
+
+                                <div class="col-12 col-sm-4 pl-2 pr-0 py-2" style="display: none;">
+                                    {{ form.first_name|as_crispy_field }}
+                                </div>
+
+                                <div class="col-12 col-sm-4 pl-2 pl-sm-0 pr-2 py-2" style="display: none;">
+                                    {{ form.last_name|as_crispy_field }}
+                                </div>
+
+                                <div class="delete-row">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                {% endwith %}
             </div>
 
-            {{ form.member|as_crispy_field }}
+            <div class="row py-2">
+                <div class="col">
+                    <input type="submit" class="btn btn-primary btn-lg float-right" value="Submit"/>
+                </div>
+            </div>
 
-        {% endfor %}
-
+        </form>
     </div>
 
 {% endblock %}
 
 {% block scripts %}
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js" ></script>
-    <script>
-    $('.heavyselect2widget').select2({
-      ajax: {
-        url: '{% url 'clubs:api-members-list' club_id %}',
-        data: function (params) {
-          var query = {
-            search: params.term,
-            format: 'json'
-          };
-          return query;
-        }
-      }
-    });
-    </script>
-{% endblock %}
+    {{ form.media.js }}
+    <script type="text/javascript" src="{{ formset_js_url }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <script id="ajax-url" type="application/json">'{% url 'clubs:api-members-list' club_id %}'</script>
+    <script type="text/javascript" src="{{ page_js }}"></script>
 
+{% endblock %}

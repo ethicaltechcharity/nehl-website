@@ -67,13 +67,15 @@
                 </thead>
                 <tbody>
                 {% for club in clubs %}
-                <tr>
-                    <td>{{ club.name }}</td>
-                    <td>{{ club.main_venue.name }}</td>
-                    <td>
-                        <a class="btn btn-primary btn-sm" href="{% url 'clubs:detail' club.id %}" role="button">More Info</a>
-                    </td>
-                </tr>
+                    {% if not club.is_test %}
+                        <tr>
+                            <td>{{ club.name }}</td>
+                            <td>{{ club.main_venue.name }}</td>
+                            <td>
+                                <a class="btn btn-primary btn-sm" href="{% url 'clubs:detail' club.id %}" role="button">More Info</a>
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
                 </tbody>
             </table>

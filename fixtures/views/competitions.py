@@ -69,11 +69,6 @@ class CompetitionStandingsView(ListView):
                                               pk=self.kwargs['season'])
         return context
 
-    def get(self, request, *args, **kwargs):
-        if not can_administrate_competition(request.user.id, kwargs['competition']):
-            return HttpResponseForbidden()
-        return super().get(request, *args, **kwargs)
-
 
 class SeasonCreateView(LoginRequiredMixin, FormView):
     form_class = SeasonCreateForm

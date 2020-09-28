@@ -15,5 +15,6 @@ urlpatterns = [
     path('api/members/', views.MemberListAPI.as_view(), name='api-all-members-list'),
     path('<int:club_id>/members/<int:pk>/', views.MemberDetail.as_view(), name='members-detail'),
     path('<int:club_id>/members/request-transfer', views.request_transfer, name='request-transfer'),
-    path('transfer/', views.AdminMemberTransfer.as_view(), name='admin-member-transfer')
+    path('transfer/', views.AdminMemberTransfer.as_view(), name='admin-member-transfer'),
+    path('members/register/', views.AdminMemberRegister.as_view(), name='admin-member-register')
 ]

@@ -14,7 +14,7 @@ from rest_framework.mixins import ListModelMixin
 
 from clubs.models import Club, Member, TransferRequest, ClubManagementPosition
 from clubs.forms import TransferRequestForm, ClubManagementFormSet, \
-    ClubManagementFormSetHelper, AdminMemberTransferForm
+    ClubManagementFormSetHelper, AdminMemberTransferForm, AdminMemberRegisterForm
 from clubs.serializers import MemberSerializer, MemberPlusDOBSerializer
 
 from nehlwebsite.utils.auth_utils import can_manage_club
@@ -141,12 +141,15 @@ def edit_club_contacts(request, club_id):
         return HttpResponseForbidden()
 
     if request.method == 'GET':
-        formset = ClubManagementFormSet(queryset=ClubManagementPosition.objects.filter(club=club))
+        formset = ClubManagementFormSet(queryset=ClubManagementPosition.objects.filter(club=club),
+                                        form_kwargs={'club': club})
         for form in formset:
             form.fields['holder'].queryset = Member.objects.none()
 
     elif request.method == 'POST':
-        formset = ClubManagementFormSet(request.POST, queryset=ClubManagementPosition.objects.filter(club=club))
+        formset = ClubManagementFormSet(request.POST,
+                                        queryset=ClubManagementPosition.objects.filter(club=club),
+                                        form_kwargs={'club': club})
         for form in formset:
             form.fields['holder'].queryset = Member.objects.filter(club=club)
 
@@ -156,7 +159,8 @@ def edit_club_contacts(request, club_id):
         if formset.is_valid():
             formset.save()
 
-        formset = ClubManagementFormSet(queryset=ClubManagementPosition.objects.filter(club=club))
+        formset = ClubManagementFormSet(queryset=ClubManagementPosition.objects.filter(club=club),
+                                        form_kwargs={'club': club})
         for form in formset:
             form.fields['holder'].queryset = Member.objects.filter(club=club)
 
@@ -290,7 +294,39 @@ class AdminMemberTransfer(LoginRequiredMixin, FormView):
         return super().form_valid(form)
 
 
-# class MemberRegister(LoginRequiredMixin, FormView):
-#     template_name = 'contact.html'
-#     form_class = ContactForm
-#     success_url = '/thanks/'
+class AdminMemberRegister(LoginRequiredMixin, FormView):
+    template_name = 'clubs/members/admin-register.html'
+    form_class = AdminMemberRegisterForm
+    success_url = '/accounts/profile'
+
+    def form_valid(self, form):
+        first_name = form.cleaned_data['first_name']
+        last_name = form.cleaned_data['last_name']
+        user = User.objects.create_user(self.build_username(first_name, last_name))
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
+
+        member = Member()
+        member.user = user
+        member.date_of_birth = form.cleaned_data['date_of_birth']
+        member.club = form.cleaned_data['club']
+        member.registration_date = datetime.datetime.now().date()
+        member.save()
+
+        return super().form_valid(form)
+
+    def build_username(self, first_name, last_name):
+        attempt = 0
+
+        while True:
+            username = first_name[0] + "." + last_name
+            username = username.lower()
+
+            if attempt > 0:
+                username += "." + str(attempt)
+
+            if User.objects.filter(username=username).count() == 0:
+                return username
+
+            attempt += 1

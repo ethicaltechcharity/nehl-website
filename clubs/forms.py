@@ -36,14 +36,14 @@ class EditClubManagementForm(forms.ModelForm):
             'type': 'Position'
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, club, *args, **kwargs):
         super().__init__(*args, **kwargs)
         instance = getattr(self, 'instance', None)
         if instance and instance.pk:
             self.fields['holder'].disabled = True
         else:
             self.fields['holder'].widget = HeavySelect2Widget(
-                data_url='/clubs/api/17/members/'
+                data_url='/clubs/api/' + str(club.id) + '/members/'
             )
 
 
@@ -85,3 +85,10 @@ class AdminMemberTransferForm(forms.Form):
     member = forms.ModelChoiceField(queryset=Member.objects.all(),
                                     widget=HeavySelect2Widget(data_url='/clubs/api/members/'))
     new_club = forms.ModelChoiceField(queryset=Club.objects.all())
+
+
+class AdminMemberRegisterForm(forms.Form):
+    first_name = forms.CharField(max_length=50)
+    last_name = forms.CharField(max_length=50)
+    club = forms.ModelChoiceField(queryset=Club.objects.all())
+    date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))

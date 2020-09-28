@@ -252,6 +252,12 @@ PenaltyFormset = formset_factory(PenaltyForm, max_num=32, min_num=0, validate_ma
 
 
 class MatchCardForm(forms.Form):
+    umpire_a_name = forms.CharField(required=False)
+    umpire_b_name = forms.CharField(required=False)
+    umpire_a_signed = forms.BooleanField(required=False)
+    umpire_b_signed = forms.BooleanField(required=False)
+    captain_a_signed = forms.BooleanField(required=False)
+    captain_b_signed = forms.BooleanField(required=False)
     image = forms.ImageField()
 
 

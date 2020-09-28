@@ -190,6 +190,11 @@ class FixtureMetadata(models.Model):
     time_match_card_complete = models.DateTimeField(null=True)
     time_start_time_submitted = models.DateTimeField(null=True)
 
+    umpire_a_signed = models.BooleanField(null=True)
+    umpire_b_signed = models.BooleanField(null=True)
+    captain_a_signed = models.BooleanField(null=True)
+    captain_b_signed = models.BooleanField(null=True)
+
     issue_detected = models.BooleanField(default=False)
 
 

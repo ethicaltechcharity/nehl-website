@@ -575,6 +575,10 @@ class SubmitMatchCardView(LoginRequiredMixin, FormView):
         else:
             metadata = fixture.metadata
 
+        metadata.captain_a_signed = form.cleaned_data['captain_a_signed']
+        metadata.captain_b_signed = form.cleaned_data['captain_b_signed']
+        metadata.umpire_a_signed = form.cleaned_data['umpire_a_signed']
+        metadata.umpire_b_signed = form.cleaned_data['umpire_b_signed']
         metadata.match_card_image = form.cleaned_data['image']
         metadata.match_card_image_submitted = True
         metadata.time_match_card_image_submitted = datetime.now()
@@ -582,3 +586,5 @@ class SubmitMatchCardView(LoginRequiredMixin, FormView):
         metadata.save()
 
         return HttpResponseRedirect(self.get_success_url())
+
+

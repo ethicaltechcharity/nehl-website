@@ -179,6 +179,7 @@
 {#                                    <a class="dropdown-item disabled" href="#">Submit Match Card</a>#}
 {#                                {% endif %}#}
                                 {% if not is_cancelled %}
+                                    <a class="dropdown-item" target="_blank" href="https://docs.google.com/spreadsheets/d/1AAIPXtDowLEpQ0wUWWIEPKNWOo7L9Pq2J-jHL7q_iHI/edit?usp=sharing">Submit Match Card</a>
 {#                                    {% if fixture.team_a.club == fixture.team_b.club %}#}
 {#                                        {% if can_select_squad_a %}#}
 {#                                            <a class="dropdown-item" href="{% url 'fixtures:select-squad' fixture.id fixture.team_a.id %}">Select {{ fixture.team_a.name }} Squad</a>#}

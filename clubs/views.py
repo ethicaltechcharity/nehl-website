@@ -112,7 +112,7 @@ def request_transfer(request, club_id):
                 'Transfer Request',
                 msg_plain,
                 'notifications@northeasthockeyleague.org',
-                ['danbaxter@live.co.uk', 'leighbrown@hotmail.co.uk'],
+                ['danbaxter@live.co.uk', 'nehlsecretary@gmail.com', 'nehlc@live.co.uk'],
                 html_message=msg_html,
             )
 

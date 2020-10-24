@@ -6,7 +6,8 @@ from django.core.paginator import Paginator
 from django.views.generic.edit import FormView
 from django.template.loader import render_to_string
 
-from fixtures.models import Fixture, RearrangementRequest, RearrangementResponse, FixtureRearrangement
+from fixtures.models import Fixture, RearrangementRequest, RearrangementResponse, FixtureRearrangement, FixtureMetadata, \
+    FixtureResult
 from fixtures.forms import RearrangementRequestForm, RearrangementResponseForm, CreateRearrangement
 from fixtures.utils.general import email_competition_admins, get_most_senior_parent_competition
 
@@ -226,6 +227,12 @@ class RearrangementCreate(LoginRequiredMixin, FormView):
         new_fixture.pk = None
 
         new_fixture.date = form.cleaned_data['new_date_time'].date()
+
+        new_fixture.metadata = FixtureMetadata()
+        new_fixture.result = FixtureResult()
+
+        new_fixture.metadata.save()
+        new_fixture.result.save()
 
         new_fixture.save()
 

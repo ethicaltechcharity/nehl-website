@@ -1,10 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+
+{% extends 'nehlwebsite/base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block css %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'clubs/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="jumbotron">
+            <h1 class="display-4">Set Main Club Contact</h1>
+        </div>
+
+        <dl>
+            <dt>Current Main Contact</dt>
+            <dd>{{ club.main_contact }}</dd>
+        </dl>
+
+
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input type="submit" class="btn btn-success" value="Submit">
+        </form>
+    </div>
+
+{% endblock %}
+
+{%  block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <script>
+    $('.heavyselect2widget').select2({
+      ajax: {
+        url: '',
+        data: function (params) {
+          debugger;
+          var query = {
+            search: params.term,
+            format: 'json'
+          };
+          return query;
+        }
+      }
+    });
+    </script>
+{% endblock %}

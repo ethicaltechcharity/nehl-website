@@ -221,11 +221,11 @@
                                 Admin Tools
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-{#                                {% if fixture.rearrangement_from.count < 1 %}#}
-{#                                    <a class="dropdown-item" href="{% url 'rearrangements:create' fixture.id %}">Rearrange</a>#}
-{#                                {% else %}#}
-{#                                    <a class="dropdown-item disabled" href="#">Rearrange</a>#}
-{#                                {% endif %}#}
+                                {% if fixture.rearrangement_from.count < 1 %}
+                                    <a class="dropdown-item" href="{% url 'rearrangements:create' fixture.id %}">Rearrange</a>
+                                {% else %}
+                                    <a class="dropdown-item disabled" href="#">Rearrange</a>
+                                {% endif %}
                                 <a class="dropdown-item" href="{% url 'fixtures:submit-result' fixture.id %}">Set Result</a>
                                 {% if card_complete %}
                                     <a class="dropdown-item" href="{{ fixture.metadata.match_card_image.url }}">View Match Card Image</a>

@@ -47,7 +47,10 @@ class Member(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
-        return self.user.first_name + " " + self.user.last_name
+        if self.user:
+            return self.user.first_name + " " + self.user.last_name
+        else:
+            return ''
 
 
 class TransferRequest(models.Model):

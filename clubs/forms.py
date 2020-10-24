@@ -92,3 +92,14 @@ class AdminMemberRegisterForm(forms.Form):
     last_name = forms.CharField(max_length=50)
     club = forms.ModelChoiceField(queryset=Club.objects.all())
     date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+
+
+class AdminSetMainClubContactForm(forms.Form):
+    def __init__(self, club_id, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['new_contact'] = forms.ModelChoiceField(
+            queryset=Member.objects.filter(club_id=club_id)
+        )
+        self.fields['new_contact'].widget = HeavySelect2Widget(
+            data_url='/clubs/api/' + str(club_id) + '/members/'
+        )

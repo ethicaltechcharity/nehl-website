@@ -48,7 +48,7 @@ def cancel(request, fixture_id):
             else:
                 team_cancellation = fixture.team_b
 
-            now = datetime.datetime.now()
+            now = datetime.now()
             cancellation = FixtureCancellation(
                 cancellation_reporter=user.member,
                 fixture=fixture,

@@ -14,8 +14,9 @@ from rest_framework.mixins import ListModelMixin
 
 from clubs.models import Club, Member, TransferRequest, ClubManagementPosition
 from clubs.forms import TransferRequestForm, ClubManagementFormSet, \
-    ClubManagementFormSetHelper, AdminMemberTransferForm, AdminMemberRegisterForm
+    ClubManagementFormSetHelper, AdminMemberTransferForm, AdminMemberRegisterForm, AdminSetMainClubContactForm
 from clubs.serializers import MemberSerializer, MemberPlusDOBSerializer
+from clubs.utils import can_administrate_club
 
 from nehlwebsite.utils.auth_utils import can_manage_club
 
@@ -330,3 +331,34 @@ class AdminMemberRegister(LoginRequiredMixin, FormView):
                 return username
 
             attempt += 1
+
+
+class AdminSetMainClubContact(LoginRequiredMixin, FormView):
+    form_class = AdminSetMainClubContactForm
+    success_url = ''
+    template_name = 'clubs/admin/set-main-club-contact.html'
+
+    def get(self, request, *args, **kwargs):
+        club = get_object_or_404(Club, pk=self.kwargs['club_id'])
+        if not can_administrate_club(request.user.id, club):
+            return HttpResponseForbidden()
+
+    def get_success_url(self):
+        return '/clubs/' + str(self.kwargs['club_id']) + '/'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'club_id': self.kwargs['club_id']})
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        club = get_object_or_404(Club, pk=self.kwargs['club_id'])
+        context = super(AdminSetMainClubContact, self).get_context_data()
+        context.update({'club': club})
+        return context
+
+    def form_valid(self, form):
+        club = get_object_or_404(Club, pk=self.kwargs['club_id'])
+        club.main_contact = form.cleaned_data['new_contact']
+        club.save()
+        return super().form_valid(form)

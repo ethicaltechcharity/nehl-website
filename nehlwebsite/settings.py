@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'storages',
     'django_select2',
     'dynamic_formsets',
-    'django_extensions'
+    'django_extensions',
+    'captcha'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -187,6 +188,11 @@ MEDIAFILES_LOCATION = 'media'
 DEFAULT_FILE_STORAGE = 'nehlwebsite.custom_storages.MediaStorage'
 
 ALLOWED_HOSTS += os.environ['ALLOWED_HOST']
+
+# Recaptcha
+RECAPTCHA_REQUIRED_SCORE = 0.85
+RECAPTCHA_PUBLIC_KEY = os.environ['RECAPTCHA_PUBLIC_KEY']
+RECAPTCHA_PRIVATE_KEY = os.environ['RECAPTCHA_PRIVATE_KEY']
 
 if DEBUG:
     # SECURITY WARNING: keep the secret key used in production secret!

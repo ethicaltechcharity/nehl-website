@@ -15,7 +15,7 @@ django-extensions==2.2.9
 django-select2==7.2.0
 django-ses==0.8.14
 django-storages==1.9.1
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 docutils==0.15.2
 future==0.16.0
 graphviz==0.14
